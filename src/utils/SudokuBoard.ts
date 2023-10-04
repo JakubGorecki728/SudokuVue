@@ -49,7 +49,7 @@ export class SudokuBoard {
     }
 
     restartBoard() {
-        SudokuUtils.forEachCell(this._rows, (el, row, col) => {
+        SudokuUtils.forEachCell(this._rows, (el) => {
             if (!el.immutable) { el.value = null }
         })
     }

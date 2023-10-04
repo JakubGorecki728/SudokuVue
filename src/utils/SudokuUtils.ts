@@ -1,4 +1,3 @@
-import pipe from "lodash/fp/pipe";
 import type { ArrStruct, CellCallback, CellIdxRange, CellObjPos, IterateUseCase, LiteralObject, ObjStruct, Tuple, Range } from "./SudokuTypes";
 import _ from "lodash";
 
@@ -68,20 +67,7 @@ export class SudokuUtils {
 
 
     static generateEmptyStruct<T extends 0>(): ArrStruct<T> {
-        return Array.from({ length: 9 }, row => Array.from({ length: 9 }, col => 0)) as ArrStruct<T>
-    }
-
-    static generateRandomStruct<T extends Range>(filledCells: CellIdxRange): ArrStruct<T>  {
-        const struct = SudokuUtils.generateEmptyStruct() as any;
-
-        const validStruct = SudokuUtils.mapCell(struct, (cell, row, col) => {
-            const potentialValues = SudokuUtils.getPotentialValuesForCell(struct, row, col);
-            const value = potentialValues[Math.floor(Math.random() * potentialValues.length)];
-            struct[row-1][col-1] = value;
-            return value;
-        })
-        console.log(SudokuUtils.isBoardValid(struct))
-        return validStruct as unknown as ArrStruct<T>
+        return Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => 0)) as ArrStruct<T>
     }
 
     static solve<T extends Range | 0>(struct: ArrStruct<T>): ArrStruct<T> | any  {
@@ -111,7 +97,7 @@ export class SudokuUtils {
                 const lastCache = (cache as any)[cache.length-1];
                 const newTry = prevStruct[lastCache.row-1][lastCache.col-1];
                 newTry.value = lastCache.potentials[0]
-                lastCache.potentials = lastCache.potentials.filter(el => el !== lastCache.potentials[0])
+                lastCache.potentials = lastCache.potentials.filter((el: any) => el !== lastCache.potentials[0])
                 if (!lastCache.potentials.length) {
                     (cache as any).pop();
                     newTry.isExplicit = cache.length === 0 ? true : false;
@@ -150,17 +136,11 @@ export class SudokuUtils {
 
     }
 
-    static solveNew<T extends Range | 0>(struct: ArrStruct<T>): ArrStruct<T> | any  {
-
-
-
-    }
-
 
     static getPotentialValuesForCell<T extends LiteralObject>(struct: ArrStruct<T>, row: Range, col: Range, callback: (cell: T) => Range | 0): Range[];
     static getPotentialValuesForCell<T extends Range | 0>(struct: ArrStruct<T>, row: Range, col: Range, callback?: undefined): Range[];
     static getPotentialValuesForCell<T extends Range | 0 | LiteralObject>(struct: ArrStruct<T>, row: Range, col: Range, callback?: (cell: T) => Range | 0): Range[] {
-        const _struct = callback ? SudokuUtils.mapCell(struct, el => callback(el)) : struct;
+        const _struct = (callback ? SudokuUtils.mapCell(struct, el => callback(el)) : struct) as any
         if (_struct[row-1][col-1] !== 0) return [];
         const rows = _struct;
         const cols = SudokuUtils.transpose(_struct);
@@ -197,7 +177,7 @@ export class SudokuUtils {
     }
 
     private static getValidityStruct<T extends Range | 0>(rows: ArrStruct<T>): ArrStruct<boolean> {
-        return rows.map((r, ri, ra) => r.map((c, ci, ca) => !c ? true : 
+        return rows.map((r, ri, ra) => r.map((c, ci) => !c ? true : 
             [ra[ri], ra.map(x => x[ri]), SudokuUtils.rowsToSquares(ra as any)[SudokuUtils.getChunkIndex(SudokuUtils.getCellIndex(<any>ci+1, <any>ri+1))-1]]
                 .every(el => el.filter(x => x === c).length < 2))) as ArrStruct<boolean>
     }

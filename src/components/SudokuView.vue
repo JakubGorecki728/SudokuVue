@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import SudokuCell from './SudokuCell.vue';
 import { onMounted } from 'vue';
 import { SudokuBoard } from '@/utils/SudokuBoard';
-import type { CellStringPos, CellObjPos } from '@/utils/SudokuTypes';
+import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
 
     onMounted(() => {
         createBoard();
@@ -42,9 +42,9 @@ import type { CellStringPos, CellObjPos } from '@/utils/SudokuTypes';
 
     const boardValid = ref(true);
 
-    const viewFinderHandler = (row, col) => (row == selectedCell.value?.position?.row || col == selectedCell.value?.position?.col);
+    const viewFinderHandler = (row: number, col: number) => (row == selectedCell.value?.position?.row || col == selectedCell.value?.position?.col);
 
-    const sameValueHighlightHandler = (cell) => {
+    const sameValueHighlightHandler = (cell: Cell) => {
         const slctd = selectedCell.value;
         return slctd?.value !== null && slctd?.value === cell?.value &&
         (slctd?.position?.row !== cell?.position?.row ||
@@ -52,12 +52,12 @@ import type { CellStringPos, CellObjPos } from '@/utils/SudokuTypes';
     }
         
 
-    const cellClickHandler = (pos) => {
+    const cellClickHandler = (pos: { row: any; col: any; }) => {
         possibleValues.value = board?.value?.getPosibleMoves(pos.row, pos.col);
     }
 
     const cellValueChangeHandler = () => {
-        boardValid.value = board.value?.isBoardValid();
+        boardValid.value = board.value?.isBoardValid() ?? true;
     }
 </script>
 
