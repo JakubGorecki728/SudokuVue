@@ -4,7 +4,7 @@ import SudokuView from './components/SudokuView.vue'
 </script>
 
 <template>        
-  <div class="d-flex justify-content-center align-items-center m-5">
+  <div class="d-flex justify-content-center align-items-center">
 
       <SudokuView />
 

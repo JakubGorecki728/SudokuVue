@@ -45,8 +45,9 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
         user-select: none !important;
         text-align: center; 
         background-color: transparent;
-        width: 40px; 
-        height: 40px; 
+        height: 100%;
+        font-size: 20px;
+        padding: 0
     }
     .form-control:focus {
         background-color: rgba(0, 255, 102, 0.3);
@@ -66,6 +67,16 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
     ::selection {
         color: default;
         background: transparent;
+    }
+    @media (max-width: 360px) {
+        .form-control {
+        font-size: 12px;
+        }
+    }
+    @media (min-width: 361px) and (max-width: 600px) {
+        .form-control {
+        font-size: 16px;
+        }
     }
 
 </style>

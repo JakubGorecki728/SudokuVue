@@ -63,9 +63,9 @@ import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
 
 
 <template>
-    <div>
+    <div class="container" style="aspect-ratio: 1 / 1; min-width: 200px; max-width: 600px;">
         <div>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center py-3">
                 <v-btn class="me-2" @click="board?.solve(); cellValueChangeHandler()" :disabled="!boardValid">Try Solve</v-btn>
                 <v-btn class="me-2" @click="createBoard(); cellValueChangeHandler()">New board</v-btn>
                 <v-btn @click="board?.restartBoard(); cellValueChangeHandler()">Restart board</v-btn>
@@ -76,18 +76,18 @@ import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
         <div
         @keydown="switchFocusHandler"
         v-if="board"
-        class="border" 
+        class="border d-flex flex-column h-100" 
         >
             <div 
             :key="rowIdx"
             v-for="(row, rowIdx) of board.rows" 
-            class="d-flex" 
+            class="d-flex h-100" 
             >
                 <div
                 ref="cellRef"
                 v-for="(cell, cellIdx) of row"
                 :key="cellIdx"
-                class="p-1 cell-container" 
+                class="cell-container d-flex flex-column" 
                 :class="{ 
                     'border-bottom': innerBorder(rowIdx),
                     'border-right': innerBorder(cellIdx),
@@ -128,6 +128,9 @@ import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
 
     .same-value-highlight {
         background-color: rgba(255, 238, 0, 0.15) !important;
+    }
+    .cell-container {
+        padding: 0.3%;
     }
 
 </style>
