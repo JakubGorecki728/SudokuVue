@@ -47,7 +47,7 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
         background-color: transparent;
         height: 100%;
         font-size: 20px;
-        padding: 0
+        padding: 0;
     }
     .form-control:focus {
         background-color: rgba(0, 255, 102, 0.3);
@@ -55,13 +55,13 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
         box-shadow: 0px 0px 5px rgba(0, 255, 102, 0.89);
     }
     .cell-immutable {
-        background-color: rgba(112, 112, 112, 0.1) !important;
+        background-color: rgba(112, 112, 112, 0.2) !important;
         border-color: rgba(112, 112, 112, 0.3) !important;
     }
     .cell-immutable:focus {
         box-shadow: 0px 0px 5px rgba(112, 112, 112, 0.7) !important;
         border-color: rgba(112, 112, 112, 0.7) !important;
-        background-color: rgba(112, 112, 112, 0.3) !important;
+        background-color: rgba(112, 112, 112, 0.4) !important;
     }
 
     ::selection {

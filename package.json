@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
-    "publish":"git add .",
+    "publish":"npm run build & git add dist -f & git commit -m \"deploy2\" & git subtree push --prefix dist origin gh-pages",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",

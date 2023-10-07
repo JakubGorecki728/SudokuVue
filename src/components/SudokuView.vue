@@ -4,6 +4,7 @@ import SudokuCell from './SudokuCell.vue';
 import { onMounted } from 'vue';
 import { SudokuBoard } from '@/utils/SudokuBoard';
 import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
+import { setAppTheme } from './../main';
 
     onMounted(() => {
         createBoard();
@@ -12,6 +13,9 @@ import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
     const cellRef = ref()
     const createBoard = () => board.value = SudokuBoard.create('easy');
     const innerBorder = (idx: number | string) => ['3', '6'].includes(idx+'');
+    const possibleValues = ref()
+    const selectedCell = ref();
+    const boardValid = ref(true);
     
     const switchFocusHandler = (e: KeyboardEvent) => {
         const key = e.key;
@@ -34,13 +38,6 @@ import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
         const newSelection = cells.find(el => el.id === `${pos.row}${pos.col}`);
         newSelection?.focus();
     }
-
-
-    const possibleValues = ref()
-
-    const selectedCell = ref();
-
-    const boardValid = ref(true);
 
     const viewFinderHandler = (row: number, col: number) => (row == selectedCell.value?.position?.row || col == selectedCell.value?.position?.col);
 
@@ -65,10 +62,11 @@ import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
 <template>
     <div class="container" style="aspect-ratio: 1 / 1; min-width: 200px; max-width: 600px;">
         <div>
-            <div class="d-flex justify-content-center py-3">
-                <v-btn class="me-2" @click="board?.solve(); cellValueChangeHandler()" :disabled="!boardValid">Try Solve</v-btn>
-                <v-btn class="me-2" @click="createBoard(); cellValueChangeHandler()">New board</v-btn>
+            <div class="d-flex justify-content-center py-3" style="gap: 10px">
+                <v-btn @click="board?.solve(); cellValueChangeHandler()" :disabled="!boardValid">Try Solve</v-btn>
+                <v-btn @click="createBoard(); cellValueChangeHandler()">New board</v-btn>
                 <v-btn @click="board?.restartBoard(); cellValueChangeHandler()">Restart board</v-btn>
+                <v-btn @click="setAppTheme()">Changes theme</v-btn>
             </div>
             <p class="m-2">Possible values: {{ possibleValues }}</p>
             <p class="m-2" :class="boardValid ? 'text-primary' : 'text-danger'">Board {{ boardValid ? 'valid' : 'invalid' }}</p>
@@ -112,25 +110,25 @@ import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
 
 <style scoped>
     .border{
-        border: 2px solid rgba(128, 128, 128, 0.5) !important;
+        border: 3px solid rgba(128, 128, 128, 0.5) !important;
         border-radius: 5px;
     }
     .border-bottom{
-        border-bottom: 2px solid rgba(128, 128, 128, 0.5) !important;
+        border-bottom: 3px solid rgba(128, 128, 128, 0.5) !important;
     }
     .border-right{
-        border-right: 2px solid rgba(128, 128, 128, 0.5) !important;
+        border-right: 3px solid rgba(128, 128, 128, 0.5) !important;
     }
 
     .view-finder {
-        background-color: rgba(0, 255, 102, 0.08);
+        background-color: rgba(0, 255, 102, 0.07);
     }
 
     .same-value-highlight {
         background-color: rgba(255, 238, 0, 0.15) !important;
     }
     .cell-container {
-        padding: 0.3%;
+        padding: 0.4%;
     }
 
 </style>
