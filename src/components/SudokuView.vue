@@ -28,6 +28,7 @@ import { setAppTheme } from './../main';
         if (!Object.values(dir).flat().includes(key)) { return; }
         const cells = (cellRef.value as HTMLElement[]).map(el => el.querySelector('input')) as HTMLInputElement[];
         const currentSelection = cells.find(el => el?.classList?.contains('selected'));
+
         if (!currentSelection) { return; }
         const convPosition = (pos: CellStringPos) => ({ row: parseInt(pos[0]), col: parseInt(pos[1]) }) as CellObjPos;
         const pos = convPosition((currentSelection as any).id);
@@ -56,17 +57,18 @@ import { setAppTheme } from './../main';
     const cellValueChangeHandler = () => {
         boardValid.value = board.value?.isBoardValid() ?? true;
     }
+
 </script>
 
 
 <template>
     <div class="container" style="aspect-ratio: 1 / 1; min-width: 200px; max-width: 600px;">
         <div>
-            <div class="d-flex justify-content-center py-3" style="gap: 10px">
+            <div class="d-flex justify-content-center py-3 test-css" style="gap: 10px">
                 <v-btn @click="board?.solve(); cellValueChangeHandler()" :disabled="!boardValid">Try Solve</v-btn>
                 <v-btn @click="createBoard(); cellValueChangeHandler()">New board</v-btn>
-                <v-btn @click="board?.restartBoard(); cellValueChangeHandler()">Restart board</v-btn>
-                <v-btn @click="setAppTheme()">Changes theme</v-btn>
+                <v-btn @click="board?.restartBoard(); cellValueChangeHandler()">Reset board</v-btn>
+                <v-btn @click="setAppTheme()">Change theme</v-btn>
             </div>
             <p class="m-2">Possible values: {{ possibleValues }}</p>
             <p class="m-2" :class="boardValid ? 'text-primary' : 'text-danger'">Board {{ boardValid ? 'valid' : 'invalid' }}</p>
@@ -102,8 +104,6 @@ import { setAppTheme } from './../main';
             </div>
         </div>
     </div>
-    
-
 
 </template>
 
@@ -130,5 +130,16 @@ import { setAppTheme } from './../main';
     .cell-container {
         padding: 0.4%;
     }
+
+    /* .test-css{
+            background-color: green;
+        }
+
+    @media (max-aspect-ratio: 1/1) {
+        .test-css{
+            background-color: red !important;
+            display: none !important;
+        }
+    } */
 
 </style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Cell } from '@/utils/SudokuTypes';
 import { ref, watch } from 'vue';
+import _ from "lodash"
 
 const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
 
@@ -10,9 +11,27 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
 
     const keyEventHandler = (e: KeyboardEvent) => {
         const oldValue = props.cell?.value
-        props.cell.setValue(e)
+        props.cell.setValue(e);
         if (props.cell?.value !== oldValue) emit('value-change', props.cell)
     }
+
+const inputRef = ref()
+
+const menuModel = ref(false)
+
+const menuOpenHandler = () => {
+    if (props.cell.immutable === true) { return; }
+    // console.log('touch')
+    // inputRef.value.focus();
+    menuModel.value = true;
+}
+
+const menuCloseHandler = () => {
+    // console.log('close')
+    // inputRef.value.focus();
+    menuModel.value ? menuModel.value = false : ''
+    
+}
     
 </script>
 
@@ -20,11 +39,14 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
 <template>
 
     <input
+    ref="inputRef"
+    menu-activator
     v-model="cell.value"
     :id="`${cell.position.row}${cell.position.col}`"
     @focus="selected = true; emit('cell-focusin', cell)"
-    @blur="selected = false; emit('cell-blur', null)"
+    @blur="selected = false; emit('cell-blur', null); menuCloseHandler()"
     @keydown="keyEventHandler($event); emit('cell-focusin', cell)"
+    @touchstart="menuOpenHandler"
     type="text"
     readonly
     class="form-control"
@@ -32,6 +54,38 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
         'cell-immutable': cell.immutable,
         'selected': selected
     }">
+
+    <template v-if="menuModel">
+        <v-menu
+        :activator="inputRef"
+        v-model="menuModel"
+        :open-on-hover="false"
+        :open-on-focus="false"
+        :open-on-click="false"
+        :close-on-content-click="true"
+        >
+            <div> 
+                <div v-for="(row, rowIdx) of _.chunk([1,2,3,4,5,6,7,8,9], 3)" 
+                :key="rowIdx" 
+                class="d-flex mb-1" style="gap: 5px;">
+                    <button 
+                    class="btn btn-success btn-lg"
+                    v-for="(btn, btnIdx) of row" 
+                    :key="btnIdx" 
+                    @touchstart="cell.value = (btn as any)">
+                        {{ btn }}
+                    </button>
+                </div>
+                <button 
+                class="btn btn-danger w-100"
+                @touchstart="cell.value = null">
+                    clear
+                </button>
+            </div>
+        </v-menu>
+    </template>
+
+
 </template>
 
 
