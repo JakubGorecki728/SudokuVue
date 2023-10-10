@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Cell } from '@/utils/SudokuTypes';
 import { ref, watch } from 'vue';
-import _ from "lodash"
+
 
 const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
 
@@ -15,23 +15,23 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
         if (props.cell?.value !== oldValue) emit('value-change', props.cell)
     }
 
-const inputRef = ref()
+// const inputRef = ref()
 
-const menuModel = ref(false)
+// const menuModel = ref(false)
 
-const menuOpenHandler = () => {
-    if (props.cell.immutable === true) { return; }
-    // console.log('touch')
-    // inputRef.value.focus();
-    menuModel.value = true;
-}
+// const menuOpenHandler = () => {
+//     if (props.cell.immutable === true) { return; }
+//     // console.log('touch')
+//     // inputRef.value.focus();
+//     menuModel.value = true;
+// }
 
-const menuCloseHandler = () => {
-    // console.log('close')
-    // inputRef.value.focus();
-    menuModel.value ? menuModel.value = false : ''
+// const menuCloseHandler = () => {
+//     // console.log('close')
+//     // inputRef.value.focus();
+//     menuModel.value ? menuModel.value = false : ''
     
-}
+// }
     
 </script>
 
@@ -44,9 +44,8 @@ const menuCloseHandler = () => {
     v-model="cell.value"
     :id="`${cell.position.row}${cell.position.col}`"
     @focus="selected = true; emit('cell-focusin', cell)"
-    @blur="selected = false; emit('cell-blur', null); menuCloseHandler()"
+    @blur="selected = false; emit('cell-blur', null)"
     @keydown="keyEventHandler($event); emit('cell-focusin', cell)"
-    @touchstart="menuOpenHandler"
     type="text"
     readonly
     class="form-control"
@@ -55,7 +54,7 @@ const menuCloseHandler = () => {
         'selected': selected
     }">
 
-    <template v-if="menuModel">
+    <!-- <template v-if="menuModel">
         <v-menu
         :activator="inputRef"
         v-model="menuModel"
@@ -83,7 +82,7 @@ const menuCloseHandler = () => {
                 </button>
             </div>
         </v-menu>
-    </template>
+    </template> -->
 
 
 </template>

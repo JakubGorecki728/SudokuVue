@@ -5,6 +5,10 @@ import { onMounted } from 'vue';
 import { SudokuBoard } from '@/utils/SudokuBoard';
 import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
 import { setAppTheme } from './../main';
+import _ from "lodash"
+import type { MenuItems } from './CustomMenu.vue';
+import CustomMenu from './CustomMenu.vue';
+import type { MdiIcon } from '@/utils/mdi-icons.type';
 
     onMounted(() => {
         createBoard();
@@ -58,6 +62,31 @@ import { setAppTheme } from './../main';
         boardValid.value = board.value?.isBoardValid() ?? true;
     }
 
+    const menuItems: MenuItems = [
+        { 
+            title: 'Try Solve',
+            action: () => { board?.value?.solve(); cellValueChangeHandler() },
+            icon: 'shovel'
+        },
+        { 
+            title: 'New board',
+            action: () => { createBoard(); cellValueChangeHandler() },
+            icon: 'new-box'
+        },
+        { 
+            title: 'Reset board',
+            action: () => { board?.value?.restartBoard(); cellValueChangeHandler() },
+            icon: 'replay'
+        },
+        { 
+            title: 'Change theme',
+            action: () => { setAppTheme() },
+            icon: 'theme-light-dark'
+        },
+    ]
+
+    const menuActivator = ref();
+
 </script>
 
 
@@ -65,10 +94,12 @@ import { setAppTheme } from './../main';
     <div class="container" style="aspect-ratio: 1 / 1; min-width: 200px; max-width: 600px;">
         <div>
             <div class="d-flex justify-content-center py-3 test-css" style="gap: 10px">
-                <v-btn @click="board?.solve(); cellValueChangeHandler()" :disabled="!boardValid">Try Solve</v-btn>
+                <!-- <v-btn @click="board?.solve(); cellValueChangeHandler()" :disabled="!boardValid">Try Solve</v-btn>
                 <v-btn @click="createBoard(); cellValueChangeHandler()">New board</v-btn>
                 <v-btn @click="board?.restartBoard(); cellValueChangeHandler()">Reset board</v-btn>
-                <v-btn @click="setAppTheme()">Change theme</v-btn>
+                <v-btn @click="setAppTheme()">Change theme</v-btn> -->
+                <v-btn ref="menuActivator">mdi-menu</v-btn>
+                <CustomMenu :menu-items="menuItems" :activator="menuActivator"></CustomMenu>
             </div>
             <p class="m-2">Possible values: {{ possibleValues }}</p>
             <p class="m-2" :class="boardValid ? 'text-primary' : 'text-danger'">Board {{ boardValid ? 'valid' : 'invalid' }}</p>
@@ -103,6 +134,52 @@ import { setAppTheme } from './../main';
                 </div>
             </div>
         </div>
+
+        <!-- <template v-if="true">
+            <div @mousedown="$event.preventDefault();"> 
+                <div v-for="(row, rowIdx) of _.chunk([1,2,3,4,5,6,7,8,9], 3)" 
+                :key="rowIdx" 
+                class="d-flex mb-1" style="gap: 5px;">
+                    <button 
+                    :disabled="!selectedCell"
+                    class="btn btn-success btn-lg"
+                    v-for="(btn, btnIdx) of row" 
+                    :key="btnIdx" 
+                    @mouseup="selectedCell.setValue(btn as any)">
+                        {{ btn }}
+                    </button>
+                </div>
+                <button
+                :disabled="!selectedCell"
+                class="btn btn-danger w-100"
+                @mouseup="selectedCell.setValue(null)">
+                    clear
+                </button>
+            </div>
+        </template> -->
+
+        <template v-if="true">
+            <div 
+            @mousedown="$event.preventDefault();"
+            class="d-flex justify-content-between pt-4"
+            > 
+                <button 
+                    style="min-width: 1px; padding: 0px; aspect-ratio: 1/1;"
+                    :disabled="!selectedCell"
+                    class="btn btn-success btn-lg w-100 me-1"
+                    v-for="(btn, btnIdx) of [1,2,3,4,5,6,7,8,9]" 
+                    :key="btnIdx" 
+                    @mouseup="selectedCell.setValue(btn as any)">
+                        {{ btn }}
+                    </button>
+                <button
+                :disabled="!selectedCell"
+                class="btn btn-danger btn-lg"
+                @mouseup="selectedCell.setValue(null)">
+                    clear
+                </button>
+            </div>
+        </template>
     </div>
 
 </template>
@@ -111,6 +188,11 @@ import { setAppTheme } from './../main';
 <style scoped>
     .border{
         border: 3px solid rgba(128, 128, 128, 0.5) !important;
+        border-radius: 5px;
+    }
+
+    .border-invalid{
+        border: 3px solid rgba(173, 13, 13, 0.5) !important;
         border-radius: 5px;
     }
     .border-bottom{

@@ -62,7 +62,7 @@ export class SudokuBoard {
 
     private setValueHandler(value: CellValueRange | KeyboardEvent): CellValueRange | undefined {
         const val = value as any;
-        return _.inRange(parseInt(val?.key) ?? val, 1, 10) ? 
+        return _.inRange((typeof val === 'number' ? val : parseInt(val?.key)), 1, 10) ? 
             (val?.key ? parseInt(val.key) : val) : val === null || 
                 ['Delete', 'Backspace', '0'].includes(val?.key) ? 
                     null : undefined
