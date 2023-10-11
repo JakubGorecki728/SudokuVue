@@ -3,26 +3,18 @@ import type { Cell } from '@/utils/SudokuTypes';
 import type { MdiIcon } from '@/utils/mdi-icons.type';
 import { ref, watch, type ComponentPublicInstance } from 'vue';
 
-type MenuItem = {
-        title: string,
+  type MenuItem = {
+        title: string | (() => string),
         action: () => void,
-        icon?: MdiIcon
+        icon?: MdiIcon | (() => MdiIcon)
     }
+  export type MenuItems = MenuItem[];
 
-
-export type MenuItems = MenuItem[]
-
-    const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
-
-    const props = defineProps<{ menuItems: MenuItems, activator?: ComponentPublicInstance<HTMLElement> }>()
-
-    const defaultActivator = ref();
-    
+  const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change']);
+  const props = defineProps<{ menuItems: MenuItems, activator?: ComponentPublicInstance<HTMLElement> }>();
+  const defaultActivator = ref();
 
 </script>
-
-
-
 
 <template>
 
@@ -48,8 +40,10 @@ export type MenuItems = MenuItem[]
       v-for="(item, idx) of menuItems" 
       :key="idx" 
       @click="item.action()">
-        <v-icon :icon="'mdi-'+item.icon" v-if="item?.icon" class="pe-3"/>
-        <div class="w-100">{{ item.title }}</div>
+        <v-icon v-if="item?.icon" class="pe-3">
+          mdi-{{ typeof item.icon === 'function' ? item.icon() : item.icon }}
+        </v-icon>
+        <div class="w-100">{{ typeof item.title === 'function' ? item.title() : item.title }}</div>
       </button>
     </div>
   </v-menu>

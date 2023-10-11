@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import SudokuView from './components/SudokuView.vue'
-import { setAppTheme } from './main';
+
 </script>
 
 <template>        

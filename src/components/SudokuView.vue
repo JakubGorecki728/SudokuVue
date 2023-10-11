@@ -4,11 +4,12 @@ import SudokuCell from './SudokuCell.vue';
 import { onMounted } from 'vue';
 import { SudokuBoard } from '@/utils/SudokuBoard';
 import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
-import { setAppTheme } from './../main';
 import _ from "lodash"
 import type { MenuItems } from './CustomMenu.vue';
 import CustomMenu from './CustomMenu.vue';
 import type { MdiIcon } from '@/utils/mdi-icons.type';
+import { useCounterStore } from '@/stores/counter';
+import { appTheme } from '@/stores/app-theme';
 
     onMounted(() => {
         createBoard();
@@ -20,6 +21,10 @@ import type { MdiIcon } from '@/utils/mdi-icons.type';
     const possibleValues = ref()
     const selectedCell = ref();
     const boardValid = ref(true);
+
+    const theme = appTheme()
+
+
     
     const switchFocusHandler = (e: KeyboardEvent) => {
         const key = e.key;
@@ -64,14 +69,9 @@ import type { MdiIcon } from '@/utils/mdi-icons.type';
 
     const menuItems: MenuItems = [
         { 
-            title: 'Try Solve',
-            action: () => { board?.value?.solve(); cellValueChangeHandler() },
-            icon: 'shovel'
-        },
-        { 
             title: 'New board',
             action: () => { createBoard(); cellValueChangeHandler() },
-            icon: 'new-box'
+            icon: 'plus-box'
         },
         { 
             title: 'Reset board',
@@ -79,8 +79,13 @@ import type { MdiIcon } from '@/utils/mdi-icons.type';
             icon: 'replay'
         },
         { 
-            title: 'Change theme',
-            action: () => { setAppTheme() },
+            title: 'Try Solve',
+            action: () => { board?.value?.solve(); cellValueChangeHandler() },
+            icon: 'auto-fix'
+        },
+        { 
+            title: () => `Set ${theme.next} theme`,
+            action: () => { theme.change() },
             icon: 'theme-light-dark'
         },
     ]
@@ -94,11 +99,12 @@ import type { MdiIcon } from '@/utils/mdi-icons.type';
     <div class="container" style="aspect-ratio: 1 / 1; min-width: 200px; max-width: 600px;">
         <div>
             <div class="d-flex justify-content-center py-3 test-css" style="gap: 10px">
-                <!-- <v-btn @click="board?.solve(); cellValueChangeHandler()" :disabled="!boardValid">Try Solve</v-btn>
-                <v-btn @click="createBoard(); cellValueChangeHandler()">New board</v-btn>
-                <v-btn @click="board?.restartBoard(); cellValueChangeHandler()">Reset board</v-btn>
-                <v-btn @click="setAppTheme()">Change theme</v-btn> -->
-                <v-btn ref="menuActivator">mdi-menu</v-btn>
+
+                <v-btn ref="menuActivator" min-width="40" width="40" class="bg-secondary">
+                    <v-icon>mdi-menu</v-icon>
+                </v-btn>
+
+                
                 <CustomMenu :menu-items="menuItems" :activator="menuActivator"></CustomMenu>
             </div>
             <p class="m-2">Possible values: {{ possibleValues }}</p>
