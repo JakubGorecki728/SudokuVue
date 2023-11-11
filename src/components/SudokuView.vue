@@ -2,13 +2,11 @@
 import { ref } from 'vue';
 import SudokuCell from './SudokuCell.vue';
 import { onMounted } from 'vue';
-import { SudokuBoard } from '@/utils/SudokuBoard';
-import type { CellStringPos, CellObjPos, Cell } from '@/utils/SudokuTypes';
+import { SudokuBoard } from '@/utils/sudoku-board';
+import type { CellStringPos, CellObjPos, Cell } from '@/types/sudoku-types';
 import _ from "lodash"
-import type { MenuItems } from './CustomMenu.vue';
-import CustomMenu from './CustomMenu.vue';
-import type { MdiIcon } from '@/utils/mdi-icons.type';
-import { useCounterStore } from '@/stores/counter';
+import type { MenuItems } from './AppMenu.vue';
+import CustomMenu from './AppMenu.vue';
 import { appTheme } from '@/stores/app-theme';
 
     onMounted(() => {
@@ -96,8 +94,8 @@ import { appTheme } from '@/stores/app-theme';
 
 
 <template>
-    <div class="container" style="aspect-ratio: 1 / 1; min-width: 200px; max-width: 600px;">
-        <div>
+    <div style="aspect-ratio: 1 / 1; max-width: 600px;">
+        <!-- <div>
             <div class="d-flex justify-content-center py-3 test-css" style="gap: 10px">
 
                 <v-btn ref="menuActivator" min-width="40" width="40" class="bg-secondary">
@@ -109,7 +107,7 @@ import { appTheme } from '@/stores/app-theme';
             </div>
             <p class="m-2">Possible values: {{ possibleValues }}</p>
             <p class="m-2" :class="boardValid ? 'text-primary' : 'text-danger'">Board {{ boardValid ? 'valid' : 'invalid' }}</p>
-        </div>
+        </div> -->
         <div
         @keydown="switchFocusHandler"
         v-if="board"
@@ -164,7 +162,7 @@ import { appTheme } from '@/stores/app-theme';
             </div>
         </template> -->
 
-        <template v-if="true">
+        <!-- <template v-if="true">
             <div 
             @mousedown="$event.preventDefault();"
             class="d-flex justify-content-between pt-4"
@@ -185,7 +183,7 @@ import { appTheme } from '@/stores/app-theme';
                     clear
                 </button>
             </div>
-        </template>
+        </template> -->
     </div>
 
 </template>

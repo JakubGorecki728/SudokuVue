@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { Cell } from '@/utils/SudokuTypes';
-import type { MdiIcon } from '@/utils/mdi-icons.type';
+import type { MdiIcon } from '@/types/mdi-icons.type';
 import { ref, watch, type ComponentPublicInstance } from 'vue';
 
   type MenuItem = {
@@ -10,8 +9,12 @@ import { ref, watch, type ComponentPublicInstance } from 'vue';
     }
   export type MenuItems = MenuItem[];
 
-  const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change']);
-  const props = defineProps<{ menuItems: MenuItems, activator?: ComponentPublicInstance<HTMLElement> }>();
+  defineProps<{ 
+    menuItems: MenuItems, 
+    activator?: ComponentPublicInstance<HTMLElement> 
+  }>();
+
+  
   const defaultActivator = ref();
 
 </script>
@@ -25,13 +28,13 @@ import { ref, watch, type ComponentPublicInstance } from 'vue';
     min-width="40"
     class="bg-primary"
     color="grey"
-    dark
     >
       <v-icon icon="mdi-menu" />
     </v-btn>
   </template>
 
   <v-menu
+  :location="'center center'"
   :activator="activator ?? defaultActivator"
   >
     <div class="d-flex card elevation-3 rounded-0 flex-column">

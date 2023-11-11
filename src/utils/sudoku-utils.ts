@@ -1,4 +1,4 @@
-import type { ArrStruct, CellCallback, CellIdxRange, CellObjPos, IterateUseCase, LiteralObject, ObjStruct, Tuple, Range } from "./SudokuTypes";
+import type { ArrStruct, CellCallback, CellIdxRange, CellObjPos, IterateUseCase, LiteralObject, ObjStruct, Tuple, Range } from "../types/sudoku-types";
 import _ from "lodash";
 
 export class SudokuUtils {

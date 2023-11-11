@@ -1,109 +1,74 @@
 <script setup lang="ts">
-import type { Cell } from '@/utils/SudokuTypes';
-import { ref, watch } from 'vue';
 
-const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
+import _ from "lodash";
+const emit = defineEmits<{
+    (event: 'value', payload: number | null): void;
+}>();
 
-    const props = defineProps<{ cell: Cell }>()
+const emitValue = (value: number | null) => {
+    emit('value', value);
+}
 
-    const selected = ref(false)
-
-    const keyEventHandler = (e: KeyboardEvent) => {
-        const oldValue = props.cell?.value
-        props.cell.setValue(e)
-        if (props.cell?.value !== oldValue) emit('value-change', props.cell)
-    }
-
-const ac = ref(false)
-    
 </script>
 
 
 <template>
-
-<v-text-field
-    style="max-width: 200;"
-    class="menu-activator"
-    id="menu-activator"
-      color="primary"
-    >
-      ac
-    </v-text-field>
-
-    
-<v-menu
-activator="#menu-activator"
-    :open-on-click="false"
-    :open-on-focus="true"
-  :close-on-content-click="false"
-  location="bottom"
->
-<v-text-field >text</v-text-field>
-
-  <v-card>
-    <v-btn>1</v-btn>
-    <v-btn>2</v-btn>
-    <v-btn>3</v-btn>
-    <br>
-    <v-btn>4</v-btn>
-    <v-btn>5</v-btn>
-    <v-btn>6</v-btn>
-    <br>
-    <v-btn>7</v-btn>
-    <v-btn>8</v-btn>
-    <v-btn>9</v-btn>
-   
-    
-  </v-card>
-</v-menu>
-
-
-
-
+            <div 
+            @mousedown="$event.preventDefault();"
+            class="picker-container"
+            > 
+                <div v-for="(row, rowIdx) of _.chunk([1,2,3,4,5,6,7,8,9,null], 5)" :key="rowIdx" class="picker-row">
+                    <button 
+                    class="btn btn-success btn-lg picker-btn"
+                    :class="value ? 'btn-success' : 'btn-danger'"
+                    v-for="(value, valueIdx) of row" 
+                    :key="valueIdx" 
+                    @mouseup="emitValue(value)">
+                        {{ value ?? 'X' }}
+                    </button>
+                </div>
+            </div>
 </template>
 
 
 <style lang="css" scoped>
-    .form-control:hover {
-        background-color: rgba(0, 255, 102, 0.15);
-        border-color: rgba(0, 255, 102, 0.3);
-        cursor: default;
-    }
-    .form-control {
-        user-select: none !important;
-        text-align: center; 
-        background-color: transparent;
-        height: 100%;
-        font-size: 20px;
-        padding: 0;
-    }
-    .form-control:focus {
-        background-color: rgba(0, 255, 102, 0.3);
-        border-color: rgba(0, 255, 102, 0.89);
-        box-shadow: 0px 0px 5px rgba(0, 255, 102, 0.89);
-    }
-    .cell-immutable {
-        background-color: rgba(112, 112, 112, 0.2) !important;
-        border-color: rgba(112, 112, 112, 0.3) !important;
-    }
-    .cell-immutable:focus {
-        box-shadow: 0px 0px 5px rgba(112, 112, 112, 0.7) !important;
-        border-color: rgba(112, 112, 112, 0.7) !important;
-        background-color: rgba(112, 112, 112, 0.4) !important;
+
+    .picker-btn {
+        max-width: 70px; 
+        max-height: 70px; 
+        min-width: 20px;
+        min-height: 20px;
+        aspect-ratio: 1/1;
+        padding: 0px;
+        width: 70px;
+        height: 70px;
+        margin: 2px;
+
     }
 
-    ::selection {
-        color: default;
-        background: transparent;
+    .picker-container, .picker-row {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: stretch;
+        justify-content: center;
     }
-    @media (max-width: 360px) {
-        .form-control {
-        font-size: 12px;
+
+    @media (orientation: landscape) {
+        .picker-container {
+            flex-direction: row;
+        }
+        .picker-row {
+            flex-direction: column;
         }
     }
-    @media (min-width: 361px) and (max-width: 600px) {
-        .form-control {
-        font-size: 16px;
+
+    @media (orientation: portrait) {
+        .picker-container {
+            flex-direction: column;
+        }
+        .picker-row {
+            flex-direction: row;
         }
     }
 

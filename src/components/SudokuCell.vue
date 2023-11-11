@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Cell } from '@/utils/SudokuTypes';
+import type { Cell } from '@/types/sudoku-types';
 import { ref, watch } from 'vue';
 
 
@@ -14,24 +14,6 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
         props.cell.setValue(e);
         if (props.cell?.value !== oldValue) emit('value-change', props.cell)
     }
-
-// const inputRef = ref()
-
-// const menuModel = ref(false)
-
-// const menuOpenHandler = () => {
-//     if (props.cell.immutable === true) { return; }
-//     // console.log('touch')
-//     // inputRef.value.focus();
-//     menuModel.value = true;
-// }
-
-// const menuCloseHandler = () => {
-//     // console.log('close')
-//     // inputRef.value.focus();
-//     menuModel.value ? menuModel.value = false : ''
-    
-// }
     
 </script>
 
@@ -53,37 +35,6 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
         'cell-immutable': cell.immutable,
         'selected': selected
     }">
-
-    <!-- <template v-if="menuModel">
-        <v-menu
-        :activator="inputRef"
-        v-model="menuModel"
-        :open-on-hover="false"
-        :open-on-focus="false"
-        :open-on-click="false"
-        :close-on-content-click="true"
-        >
-            <div> 
-                <div v-for="(row, rowIdx) of _.chunk([1,2,3,4,5,6,7,8,9], 3)" 
-                :key="rowIdx" 
-                class="d-flex mb-1" style="gap: 5px;">
-                    <button 
-                    class="btn btn-success btn-lg"
-                    v-for="(btn, btnIdx) of row" 
-                    :key="btnIdx" 
-                    @touchstart="cell.value = (btn as any)">
-                        {{ btn }}
-                    </button>
-                </div>
-                <button 
-                class="btn btn-danger w-100"
-                @touchstart="cell.value = null">
-                    clear
-                </button>
-            </div>
-        </v-menu>
-    </template> -->
-
 
 </template>
 
@@ -132,4 +83,4 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
         }
     }
 
-</style>
+</style>@/utils/sudoku-types

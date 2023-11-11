@@ -20,7 +20,10 @@ app.use(router)
 const vuetify = createVuetify({
     components,
     directives,
-    ssr: true
+    ssr: true,
+    theme: {
+      defaultTheme: 'dark'
+    }
   })
 app.use(vuetify)
 app.mount('#app')

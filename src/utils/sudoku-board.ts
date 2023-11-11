@@ -1,7 +1,7 @@
 import _ from "lodash";
-import { SudokuGenerator } from "./SudokuGenerator";
-import type { SudokuDifficulty, DataRows, Rows, Cell, CellValueRange } from "./SudokuTypes";
-import { SudokuUtils } from "./SudokuUtils";
+import { SudokuGenerator } from "./sudoku-generator";
+import type { SudokuDifficulty, DataRows, Rows, Cell, CellValueRange } from "../types/sudoku-types";
+import { SudokuUtils } from "./sudoku-utils";
 
 
 export class SudokuBoard {
