@@ -16,7 +16,8 @@ export const appTheme = defineStore('app-theme', () => {
   const getCurrentTheme = <T extends keyof typeof Theme>(): T | null => {
     const curr = getDOM().documentElement.getAttribute('data-bs-theme');
     const allThemes = getEnumKeys(Theme);
-    return (!curr ? null : allThemes.includes(curr) ? curr : null) as T;
+    // return (!curr ? null : allThemes.includes(curr) ? curr : null) as T;
+    return (!curr || !allThemes.includes(curr) ? null : curr) as T;
   };
 
   const change = () => {
@@ -29,6 +30,6 @@ export const appTheme = defineStore('app-theme', () => {
     _current.value = getCurrentTheme();
   });
   
-  return { current, next, change, _current }
+  return { current, next, change }
 })
 
