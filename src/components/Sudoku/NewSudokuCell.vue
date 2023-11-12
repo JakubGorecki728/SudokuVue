@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { ISudokuCell } from '@/stores/sudoku';
-import type { Cell, ValueRange } from '@/types/sudoku-types';
-import { computed, ref, watch } from 'vue';
+import type { ValueRange } from '@/types/sudoku-types';
 
-    const props = defineProps<{ 
-        cell: ISudokuCell 
+    defineProps<{ 
+        cell: Readonly<ISudokuCell>
     }>();
 
     const emit = defineEmits<{

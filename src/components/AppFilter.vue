@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { MdiIcon } from '@/types/mdi-icons.type';
-import { ref, watch, type ComponentPublicInstance } from 'vue';
+import { ref, watch, } from 'vue';
 import type { TableColumns, TableRows } from './AppTable.vue';
 import { computed } from 'vue';
 import _ from 'lodash';
@@ -42,36 +41,21 @@ import _ from 'lodash';
   const values = computed(() => _.flow(_.uniq, _.sortBy)(props.rows.map(el => _.get(el, props.col.field))))
 
   const selected = ref([])
-  watch(selected, (nv) => {
+  watch(selected, () => {
     if (!selected.value.length) { all.value = false; indeterminate.value = false }
     else if (selected.value.length === values.value.length) { all.value = true; indeterminate.value = false }
     else { indeterminate.value = true }
   })
 
   const setFilters = () => {
-    const filterObj = Object.fromEntries(props.cols.map(el => 
-      [el.field, _.flow(_.uniq, _.sortBy)(props.rows.filter(z => 
-        selected.value.some( q => q === _.get(z, props.col.field))
-      ).map(x => _.get(x, el.field))) ]
-    ));
     // emit('update:filters', filterObj);
     emit('filter-func', (rows) => {
 
-      return rows.filter(z => 
+      return rows.filter((z: any) => 
         selected.value.some( q => q === _.get(z, props.col.field)))
     });
   }
 
-
-  //vmodel for every filter
-  //on checkbox change every filter comp modifies this object, whitch is stored in table component and used to filter by external func,
-  //on filter menu open, filter modifies self state due to this object
-  const filterObject = {
-    id: [1, 2, 3],
-    name: ['example1', 'example2'],
-    value: [21, 23, 32],
-    "subItem.id": [1, 2, 3]
-  }
 
   const indeterminate = ref(false)
 

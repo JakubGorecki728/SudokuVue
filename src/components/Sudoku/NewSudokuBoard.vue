@@ -1,19 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { onMounted } from 'vue';
-import { SudokuBoard } from '@/utils/sudoku-board';
-import type { CellStringPos, CellObjPos, Cell } from '@/types/sudoku-types';
-import _ from "lodash"
-import { appTheme } from '@/stores/app-theme';
-import { SingletonTest } from '@/utils/singleton-test';
+import { getDOM } from '@/main';
 import NewSudokuCell from './NewSudokuCell.vue';
 import { sudokuBoard } from '@/stores/sudoku';
+import { onMounted } from 'vue';
 
     const board = sudokuBoard();
     const innerBorder = (idx: number | string) => ['3', '6'].includes(idx+'');
 
+    onMounted(() => {
+        setTimeout(() => {
+            getDOM().body.addEventListener('keydown', (e) => {
+                keyEventHandler(e);
+            });
+        });
+    });
 
-
+    const keyEventHandler = (e: KeyboardEvent) => {
+        board.setValue(e.key);
+        board.changeSelection(e.key);
+    }
 </script>
 
 
@@ -27,11 +32,12 @@ import { sudokuBoard } from '@/stores/sudoku';
         <button class="btn btn-primary" @click="board.newGame(1)">Board 1</button>
         <div :class="{ 'text-danger': !board.isValid, 'text-success': board.isValid }">Board is {{ board.isValid ? 'valid' : 'invalid' }}</div>
         <div :class="{ 'text-danger': !board.isFull, 'text-success': board.isFull }">Board is {{ board.isFull ? 'full' : 'not full' }}</div>
+        <div>Possible values: {{ board.possibleValues.length ? board.possibleValues.join(', ') : ' - ' }}</div>
+        <div>Percent progress: {{ board.percentProgress }} %</div>
+        <progress max="100" :value="board.percentProgress"></progress>
 
 
         <div
-        tabindex="0"
-        @keydown="board.setValue($event.key); board.changeSelection($event.key)"
         v-if="board"
         class="borders d-flex flex-column" 
         style="width: 497px;"
@@ -51,7 +57,7 @@ import { sudokuBoard } from '@/stores/sudoku';
                 }">
 
                     <NewSudokuCell 
-                    :cell="cell" 
+                    :cell="(cell as any)" 
                     @cell-focusin="board.setSelection($event)"
                     ></NewSudokuCell>
 

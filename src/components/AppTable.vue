@@ -47,12 +47,12 @@ watch(selectedRow, (newVal) => {
 
 
 
-const deleteRow = (rowIdx: number) => {
-    const rowsModified = props.rows.filter((el, idx) => idx !== rowIdx);
-    const rowDeleted = props.rows[rowIdx];
-    emit('deleted-row', rowDeleted);
-    emit('update:rows', rowsModified);
-};
+// const deleteRow = (rowIdx: number) => {
+//     const rowsModified = props.rows.filter((el, idx) => idx !== rowIdx);
+//     const rowDeleted = props.rows[rowIdx];
+//     emit('deleted-row', rowDeleted);
+//     emit('update:rows', rowsModified);
+// };
 
 
 const focusOutHandler = (e: FocusEvent) => {
@@ -79,9 +79,6 @@ const sortState = ref<{
     getSorted: function(rows: TableRows): TableRows { return this.field ? _.orderBy(rows, [this.field],[this.order]) : rows }
 });
 
-const filterState = ref({
-    
-})
 
 
 
@@ -143,7 +140,7 @@ min-width="200"
                             :class="sortState.field === (col as any).field ? 'text-secondary' : 'text-muted'">
                                 {{ sortState.field === (col as any).field ? {'asc':'▼', 'desc':'▲'}[sortState.order] : "▼" }}
                             </button>
-                            <app-filter :rows="rows" :cols="columns" :col="col" v-model:filters="filters" @filter-func="filterFunc = $event"></app-filter>
+                            <app-filter :rows="(rows as any)" :cols="(columns as any)" :col="(col as any)" v-model:filters="filters" @filter-func="filterFunc = $event"></app-filter>
                         </div>
                     </th>
                 </tr>
