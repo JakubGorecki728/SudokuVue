@@ -83,4 +83,4 @@ const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
         }
     }
 
-</style>@/utils/sudoku-types
+</style>

@@ -6,6 +6,7 @@ import AppTable from './AppTable.vue';
 import { GET } from '@/types/playground.types';
 import { watch } from 'vue';
 import _ from 'lodash';
+import { SingletonTest } from '@/utils/singleton-test';
 
 
 type Row = { id: number, name: string, value: string, subItem: { id: number, name: string }}
@@ -60,36 +61,6 @@ const addExampleRows = () => {
 }
 
 
-const test = GET(`https://www.mypage.pl/main/{item}`, { queries: { param3: undefined, param4: 123 }, path: { item: 1 }})
-
-const test2 = () => console.log(new URLSearchParams({
-    string: null,
-    string2: 21
-} as any).toString())
-
-
-
-
-
-const testCurry = (a: string, b: string, c: string) => {
-    return `${a} ${b} ${c}`
-}
-
-
-const curry = (func: (...args: any[]) => any) => {
-    return func.length
-}
-
-const curriedTestCurry = _.curry(testCurry);
-const customCurriedTestCurry = curry(testCurry);
-console.log(curriedTestCurry('first', 'second')('third'))
-// console.log(customCurriedTestCurry('first')('second')('third')('fourth'))
-console.log(curry((a, b, c) => { return a+b+c+d }))
-
-
-// watch(filterString, (newVal) => {
-//     console.log(newVal)
-// });
 
 
 </script>
@@ -105,5 +76,4 @@ console.log(curry((a, b, c) => { return a+b+c+d }))
     <!-- <v-input v-model="filterString" class="form-control">INPUT</v-input> -->
 
     <v-btn @click="addExampleRows()">add row</v-btn>
-    <v-btn @click="test()">GET URL TEST</v-btn>
 </template>

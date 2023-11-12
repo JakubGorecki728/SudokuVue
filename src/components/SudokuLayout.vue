@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { useCounterStore } from '@/stores/counter';
 import SudokuValuePicker from './SudokuValuePicker.vue';
 import SudokuView from './SudokuView.vue';
 import TestComponent from './TestComponent.vue';
+import NewSudokuBoard from './Sudoku/NewSudokuBoard.vue';
 
-
+const counter = useCounterStore();
 
 </script>
 
@@ -14,13 +16,15 @@ import TestComponent from './TestComponent.vue';
     <div id="main-container">
         <div id="head-container">
             <h1>HEADER CONTENT</h1>
+
         </div>
         <div id="body-container">
             <div id="board-container">
 
 
                 <div class="board" style="aspect-ratio: 1 / 1 auto;">
-                    <SudokuView ></SudokuView>
+                    <!-- <SudokuView ></SudokuView> -->
+                    <NewSudokuBoard></NewSudokuBoard>
                 </div>
 
             </div>

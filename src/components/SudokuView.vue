@@ -8,6 +8,7 @@ import _ from "lodash"
 import type { MenuItems } from './AppMenu.vue';
 import CustomMenu from './AppMenu.vue';
 import { appTheme } from '@/stores/app-theme';
+import { SingletonTest } from '@/utils/singleton-test';
 
     onMounted(() => {
         createBoard();
@@ -20,7 +21,7 @@ import { appTheme } from '@/stores/app-theme';
     const selectedCell = ref();
     const boardValid = ref(true);
 
-    const theme = appTheme()
+    const theme = appTheme();
 
 
     
@@ -90,12 +91,21 @@ import { appTheme } from '@/stores/app-theme';
 
     const menuActivator = ref();
 
+    
+    const test = SingletonTest.getInstance();
+    console.log(test);
+    test.value = 2;
+    console.log(test);
+    const test2 = SingletonTest.getInstance();
+    console.log(test2);
+    console.log(test === test2);
+
 </script>
 
 
 <template>
     <div style="aspect-ratio: 1 / 1; max-width: 600px;">
-        <!-- <div>
+        <div>
             <div class="d-flex justify-content-center py-3 test-css" style="gap: 10px">
 
                 <v-btn ref="menuActivator" min-width="40" width="40" class="bg-secondary">
@@ -107,7 +117,7 @@ import { appTheme } from '@/stores/app-theme';
             </div>
             <p class="m-2">Possible values: {{ possibleValues }}</p>
             <p class="m-2" :class="boardValid ? 'text-primary' : 'text-danger'">Board {{ boardValid ? 'valid' : 'invalid' }}</p>
-        </div> -->
+        </div>
         <div
         @keydown="switchFocusHandler"
         v-if="board"
@@ -139,51 +149,6 @@ import { appTheme } from '@/stores/app-theme';
             </div>
         </div>
 
-        <!-- <template v-if="true">
-            <div @mousedown="$event.preventDefault();"> 
-                <div v-for="(row, rowIdx) of _.chunk([1,2,3,4,5,6,7,8,9], 3)" 
-                :key="rowIdx" 
-                class="d-flex mb-1" style="gap: 5px;">
-                    <button 
-                    :disabled="!selectedCell"
-                    class="btn btn-success btn-lg"
-                    v-for="(btn, btnIdx) of row" 
-                    :key="btnIdx" 
-                    @mouseup="selectedCell.setValue(btn as any)">
-                        {{ btn }}
-                    </button>
-                </div>
-                <button
-                :disabled="!selectedCell"
-                class="btn btn-danger w-100"
-                @mouseup="selectedCell.setValue(null)">
-                    clear
-                </button>
-            </div>
-        </template> -->
-
-        <!-- <template v-if="true">
-            <div 
-            @mousedown="$event.preventDefault();"
-            class="d-flex justify-content-between pt-4"
-            > 
-                <button 
-                    style="min-width: 1px; padding: 0px; aspect-ratio: 1/1;"
-                    :disabled="!selectedCell"
-                    class="btn btn-success btn-lg w-100 me-1"
-                    v-for="(btn, btnIdx) of [1,2,3,4,5,6,7,8,9]" 
-                    :key="btnIdx" 
-                    @mouseup="selectedCell.setValue(btn as any)">
-                        {{ btn }}
-                    </button>
-                <button
-                :disabled="!selectedCell"
-                class="btn btn-danger btn-lg"
-                @mouseup="selectedCell.setValue(null)">
-                    clear
-                </button>
-            </div>
-        </template> -->
     </div>
 
 </template>

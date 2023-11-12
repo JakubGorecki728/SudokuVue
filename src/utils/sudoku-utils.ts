@@ -1,4 +1,4 @@
-import type { ArrStruct, CellCallback, CellIdxRange, CellObjPos, IterateUseCase, LiteralObject, ObjStruct, Tuple, Range } from "../types/sudoku-types";
+import type { ArrStruct, CellCallback, CellIdxRange, CellObjPos, IterateUseCase, LiteralObject, ObjStruct, Tuple, ValueRange } from "../types/sudoku-types";
 import _ from "lodash";
 
 export class SudokuUtils {
@@ -52,10 +52,10 @@ export class SudokuUtils {
             .flatMap(x => x.map((x2, x2i) => x2.flatMap((x3, x3i) => x[x3i][x2i]))).value() as ArrStruct<T>;
     }
 
-    static isBoardValid<T extends Range | 0 | null>(rows: ArrStruct<T>, callback?: undefined): boolean;
-    static isBoardValid<T extends Range | 0 | null>(rows: ObjStruct<T>, callback?: undefined): boolean;
-    static isBoardValid<T, U extends Range | 0 | null>(rows: ArrStruct<T>, callback: T extends  Range | 0 | null ? undefined : (cell: T) => U): boolean;
-    static isBoardValid<T, U extends Range | 0 | null>(rows: ObjStruct<T>, callback: T extends  Range | 0 | null ? undefined : (cell: T) => U): boolean;
+    static isBoardValid<T extends ValueRange | 0 | null>(rows: ArrStruct<T>, callback?: undefined): boolean;
+    static isBoardValid<T extends ValueRange | 0 | null>(rows: ObjStruct<T>, callback?: undefined): boolean;
+    static isBoardValid<T, U extends ValueRange | 0 | null>(rows: ArrStruct<T>, callback: T extends  ValueRange | 0 | null ? undefined : (cell: T) => U): boolean;
+    static isBoardValid<T, U extends ValueRange | 0 | null>(rows: ObjStruct<T>, callback: T extends  ValueRange | 0 | null ? undefined : (cell: T) => U): boolean;
     static isBoardValid<T, U>(rows: ObjStruct<T> | ArrStruct<T>, callback?: (cell: T) => U): boolean {
         let struct = Array.isArray(rows) ? rows : SudokuUtils.rowsToStruct(rows);
         (struct as any) = SudokuUtils.mapCell(struct, row => {
@@ -70,8 +70,8 @@ export class SudokuUtils {
         return Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => 0)) as ArrStruct<T>
     }
 
-    static solve<T extends Range | 0>(struct: ArrStruct<T>): ArrStruct<T> | any  {
-        const cache: { row: Range, col: Range, potentials: (Range | 0)[] }[] = [] as any;
+    static solve<T extends ValueRange | 0>(struct: ArrStruct<T>): ArrStruct<T> | any  {
+        const cache: { row: ValueRange, col: ValueRange, potentials: (ValueRange | 0)[] }[] = [] as any;
         if (!SudokuUtils.isBoardValid(struct)) { console.log('board is invalid'); return struct}
         let backtracks = 0;
         let steps = 0;
@@ -137,9 +137,9 @@ export class SudokuUtils {
     }
 
 
-    static getPotentialValuesForCell<T extends LiteralObject>(struct: ArrStruct<T>, row: Range, col: Range, callback: (cell: T) => Range | 0): Range[];
-    static getPotentialValuesForCell<T extends Range | 0>(struct: ArrStruct<T>, row: Range, col: Range, callback?: undefined): Range[];
-    static getPotentialValuesForCell<T extends Range | 0 | LiteralObject>(struct: ArrStruct<T>, row: Range, col: Range, callback?: (cell: T) => Range | 0): Range[] {
+    static getPotentialValuesForCell<T extends LiteralObject>(struct: ArrStruct<T>, row: ValueRange, col: ValueRange, callback: (cell: T) => ValueRange | 0): ValueRange[];
+    static getPotentialValuesForCell<T extends ValueRange | 0>(struct: ArrStruct<T>, row: ValueRange, col: ValueRange, callback?: undefined): ValueRange[];
+    static getPotentialValuesForCell<T extends ValueRange | 0 | LiteralObject>(struct: ArrStruct<T>, row: ValueRange, col: ValueRange, callback?: (cell: T) => ValueRange | 0): ValueRange[] {
         const _struct = (callback ? SudokuUtils.mapCell(struct, el => callback(el)) : struct) as any
         if (_struct[row-1][col-1] !== 0) return [];
         const rows = _struct;
@@ -161,25 +161,37 @@ export class SudokuUtils {
         return potentialValue ? [potentialValue] : potentialVals
     }
 
-    private static isBoardFull<T extends LiteralObject>(struct: ArrStruct<T>, callback: (cell: T) => Range | 0): boolean;
-    private static isBoardFull<T extends Range | 0>(struct: ArrStruct<T>, callback?: undefined): boolean;
-    private static isBoardFull<T extends Range | 0 | LiteralObject>(struct: ArrStruct<T>, callback?: (cell: T) => Range | 0): boolean {
+    static isBoardFull<T extends LiteralObject>(struct: ArrStruct<T>, callback: (cell: T) => ValueRange | 0): boolean;
+    static isBoardFull<T extends ValueRange | 0>(struct: ArrStruct<T>, callback?: undefined): boolean;
+    static isBoardFull<T extends ValueRange | 0 | LiteralObject>(struct: ArrStruct<T>, callback?: (cell: T) => ValueRange | 0): boolean {
         return struct.every(el => el.every(cell => callback ? callback(cell) !== 0 : cell !== 0))
     }
 
-    private static getPotentialValues<T extends Tuple<Range | 0, 9>>(row: T, col: T, square: T): Range[] {
-        return _.difference(Array.from({ length: 9 }, (x, i) => i + 1), [...new Set([...row, ...col, ...square])]) as Range[];
+    private static getPotentialValues<T extends Tuple<ValueRange | 0, 9>>(row: T, col: T, square: T): ValueRange[] {
+        return _.difference(Array.from({ length: 9 }, (x, i) => i + 1), [...new Set([...row, ...col, ...square])]) as ValueRange[];
     }
 
-    private static getAdjacentPositions(row: Range, col: Range): { row: Range; col: Range }[] {
+    private static getAdjacentPositions(row: ValueRange, col: ValueRange): { row: ValueRange; col: ValueRange }[] {
         const adj: any = [row, col].map(pos => Array.from({ length: 3 }, (x, i) => Math.ceil(pos/3)*3-2 +i));
         return adj[0].flatMap((row: any) => adj[1].map((col: any) => ({ row, col })))
     }
 
-    private static getValidityStruct<T extends Range | 0>(rows: ArrStruct<T>): ArrStruct<boolean> {
+    private static getValidityStructOLD<T extends ValueRange | 0>(rows: ArrStruct<T>): ArrStruct<boolean> {
         return rows.map((r, ri, ra) => r.map((c, ci) => !c ? true : 
             [ra[ri], ra.map(x => x[ri]), SudokuUtils.rowsToSquares(ra as any)[SudokuUtils.getChunkIndex(SudokuUtils.getCellIndex(<any>ci+1, <any>ri+1))-1]]
                 .every(el => el.filter(x => x === c).length < 2))) as ArrStruct<boolean>
+    }
+
+    static getValidityStruct(rows: ArrStruct<ValueRange | 0>): ArrStruct<boolean> {
+        const cols = SudokuUtils.transpose(rows);
+        const squares = SudokuUtils.rowsToSquares(rows);
+        return SudokuUtils.mapCell(rows, (cell, r, c) => {
+            if (cell === 0) return true;
+            return [rows[r-1], cols[c-1], squares[SudokuUtils.getChunkIndexByPos(r, c)-1]]
+                .map(arr => arr.filter(el => el === cell).length > 1 ? false : true)
+                .every(el => el === true);
+        })
+
     }
 
     //PRIVATE FUNCTIONS
@@ -190,7 +202,7 @@ export class SudokuUtils {
         for (let row = 1; row <= 9; row++) {
             for (let col = 1; col <= 9; col++) {
                 const pos = { row: isArr ? row - 1 : row, col: isArr ? col - 1 : col }
-                const clbck = () => callback((rows as any)[pos.row][pos.col], row as unknown as Range, col as unknown as Range);
+                const clbck = () => callback((rows as any)[pos.row][pos.col], row as unknown as ValueRange, col as unknown as ValueRange);
 
                 if (usecase === 'forEach') { clbck(); }
                 else if (usecase === 'map') { (rows as any)[pos.row][pos.col] = clbck(); }
@@ -202,7 +214,7 @@ export class SudokuUtils {
         else if(usecase === 'filter') { return filterArr; }
     }
 
-    private static eachRowValid<T extends Range | 0>(rows: ArrStruct<T>): Tuple<boolean, 9> {
+    private static eachRowValid<T extends ValueRange | 0>(rows: ArrStruct<T>): Tuple<boolean, 9> {
         return rows.map(x => x.filter(r => r))
             .map(el => el.length === [...new Set(el)].length) as Tuple<boolean, 9>;
     }
@@ -211,19 +223,19 @@ export class SudokuUtils {
         return !rows.includes(false);
     }
 
-    private static isValidityStructValid(rows: ArrStruct<boolean>): boolean {
+    static isValidityStructValid(rows: ArrStruct<boolean>): boolean {
         return rows.map(row => row.every(col => col)).every(row => row)
     }
 
-    private static getChunkIndexByPos(row: Range, col: Range): Range {
+    private static getChunkIndexByPos(row: ValueRange, col: ValueRange): ValueRange {
         return SudokuUtils.getChunkIndex(SudokuUtils.getCellIndex(row, col))
     }
 
-    private static getChunkIndex(cellIdx: CellIdxRange): Range {
-        return Math.floor(((cellIdx-1) % 9) / 3) + 3 * Math.floor((cellIdx-1) / (9 * 3))+1 as Range
+    private static getChunkIndex(cellIdx: CellIdxRange): ValueRange {
+        return Math.floor(((cellIdx-1) % 9) / 3) + 3 * Math.floor((cellIdx-1) / (9 * 3))+1 as ValueRange
     }
 
-    private static getCellIndex(row: Range, col: Range): CellIdxRange {
+    private static getCellIndex(row: ValueRange, col: ValueRange): CellIdxRange {
         return (row-1)*9 + col as CellIdxRange
     }
 

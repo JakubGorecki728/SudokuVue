@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+import { useCounterStore } from "@/stores/counter";
+import { sudokuBoard } from "@/stores/sudoku";
 import _ from "lodash";
 const emit = defineEmits<{
     (event: 'value', payload: number | null): void;
@@ -8,6 +10,8 @@ const emit = defineEmits<{
 const emitValue = (value: number | null) => {
     emit('value', value);
 }
+
+const board = sudokuBoard();
 
 </script>
 
@@ -23,6 +27,7 @@ const emitValue = (value: number | null) => {
                     :class="value ? 'btn-success' : 'btn-danger'"
                     v-for="(value, valueIdx) of row" 
                     :key="valueIdx" 
+                    @click="board.setValue(value as any)"
                     @mouseup="emitValue(value)">
                         {{ value ?? 'X' }}
                     </button>
