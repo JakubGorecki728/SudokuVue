@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MdiIcon } from '@/types/mdi-icons.type';
+import type { MdiIcon } from '@/types/mdi-icons';
 import { ref, watch, type ComponentPublicInstance } from 'vue';
 
   type MenuItem = {
@@ -34,7 +34,7 @@ import { ref, watch, type ComponentPublicInstance } from 'vue';
   </template>
 
   <v-menu
-  :location="'center center'"
+  :location="'bottom'"
   :activator="activator ?? defaultActivator"
   >
     <div class="d-flex card elevation-3 rounded-0 flex-column">
@@ -56,4 +56,4 @@ import { ref, watch, type ComponentPublicInstance } from 'vue';
 
 <style lang="css" scoped>
   
-</style>
+</style>@/types/mdi-icons

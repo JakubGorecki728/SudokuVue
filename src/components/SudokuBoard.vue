@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { getDOM } from '@/main';
-import NewSudokuCell from './NewSudokuCell.vue';
+import SudokuCell from './SudokuCell.vue';
 import { sudokuBoard } from '@/stores/sudoku';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+import { appTheme } from '@/stores/app-theme';
+import type { MenuItems } from './AppMenu.vue';
+import AppMenu from './AppMenu.vue';
+import { SudokuTemplates } from '@/utils/sudoku-templates';
 
     const board = sudokuBoard();
     const innerBorder = (idx: number | string) => ['3', '6'].includes(idx+'');
@@ -19,6 +23,36 @@ import { onMounted } from 'vue';
         board.setValue(e.key);
         board.changeSelection(e.key);
     }
+
+    const theme = appTheme();
+
+    const menuItems: MenuItems = [
+        { 
+            title: 'New board',
+            action: () => {  },
+            icon: 'plus-box'
+        },
+        { 
+            title: 'Reset board',
+            action: () => {  },
+            icon: 'replay'
+        },
+        { 
+            title: 'Try Solve',
+            action: () => {  },
+            icon: 'auto-fix'
+        },
+        { 
+            title: () => `Set ${theme.next} theme`,
+            action: () => { theme.change() },
+            icon: 'theme-light-dark'
+        },
+    ]
+
+    const menuActivator = ref();
+
+    const newTemplateTest = () => console.log(SudokuTemplates.getTemplate(2));
+
 </script>
 
 
@@ -27,6 +61,7 @@ import { onMounted } from 'vue';
 
     <div class="d-flex flex-column" style="gap: 5px">
 
+        <button class="btn btn-success" @click="newTemplateTest()">Test template parser</button>
         <button class="btn btn-primary" @click="board.resetGame()">Reset game</button>
         <button class="btn btn-primary" @click="board.newGame(0)">Board 0</button>
         <button class="btn btn-primary" @click="board.newGame(1)">Board 1</button>
@@ -35,6 +70,12 @@ import { onMounted } from 'vue';
         <div>Possible values: {{ board.possibleValues.length ? board.possibleValues.join(', ') : ' - ' }}</div>
         <div>Percent progress: {{ board.percentProgress }} %</div>
         <progress max="100" :value="board.percentProgress"></progress>
+
+        <v-btn ref="menuActivator" min-width="40" width="40" class="bg-secondary">
+            <v-icon>mdi-menu</v-icon>
+        </v-btn>
+        
+        <AppMenu :menu-items="menuItems" :activator="menuActivator"></AppMenu>
 
 
         <div
@@ -56,10 +97,10 @@ import { onMounted } from 'vue';
                     'border-right': innerBorder(cell.col)
                 }">
 
-                    <NewSudokuCell 
+                    <SudokuCell 
                     :cell="(cell as any)" 
                     @cell-focusin="board.setSelection($event)"
-                    ></NewSudokuCell>
+                    ></SudokuCell>
 
 
                 </div>

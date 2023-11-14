@@ -1,4 +1,5 @@
 import type { ArrStruct, IntRange, ReadableStruct, ValueRange } from "@/types/sudoku-types";
+import { SudokuTemplates } from "@/utils/sudoku-templates";
 import { SudokuUtils } from "@/utils/sudoku-utils";
 import _ from "lodash";
 import { defineStore } from "pinia";
@@ -9,7 +10,7 @@ import { computed, ref, type Ref, type ComputedRef } from "vue";
 export const sudokuBoard = defineStore('sudoku-board', () => {
 
     const _boardNo = ref(0);
-    const _generated = computed(() => boards[_boardNo.value]);
+    const _generated = computed(() => SudokuTemplates.getTemplate(_boardNo.value));
     const _currentStruct = ref<ReadableStruct>(_generated.value);
     const _validityStruct = computed(() => SudokuUtils.getValidityStruct(_currentStruct.value));
     const _currentSelection = ref<ISudokuCell | null>(null);
@@ -27,8 +28,8 @@ export const sudokuBoard = defineStore('sudoku-board', () => {
         selected: computed(() => _currentSelection.value?.row === row && _currentSelection.value?.col === col),
         valid: computed(() => _validityStruct.value[row-1][col-1]),
         viewfinder: computed(() => _currentSelection.value?.row === row || _currentSelection.value?.col === col ),
-        sameValueSelected: computed(() => _currentSelection.value?.value === val.value),
-      } as ISudokuCell
+        sameValueSelected: computed(() => _currentSelection.value?.value === val.value)
+      } satisfies ISudokuCell
     });
 
     const setSelection = (e: { row: ValueRange, col: ValueRange } | null) => {
@@ -58,7 +59,7 @@ export const sudokuBoard = defineStore('sudoku-board', () => {
           left: ['ArrowLeft', 'A', 'a'],
           down: ['ArrowDown', 'S', 's'],
           right: ['ArrowRight', 'D', 'd']
-      }
+      };
       if (!Object.values(direction).flat().includes(key)) return;
       
       const pos = { row: _currentSelection.value.row, col: _currentSelection.value.col};
@@ -94,7 +95,7 @@ export const sudokuBoard = defineStore('sudoku-board', () => {
       const countFilled = (struct: ReadableStruct) => struct.flat().filter(el => el !== 0).length;
       const initialFilled = countFilled(_generated.value);
       const currentFilled = countFilled(_currentStruct.value);
-      return Math.floor(((currentFilled - initialFilled) / (81 - initialFilled))*100);
+      return initialFilled === 81 ? 100 : Math.floor(((currentFilled - initialFilled) / (81 - initialFilled))*100) as IntRange<0, 100>;
     });
     
     return { 
@@ -108,7 +109,7 @@ export const sudokuBoard = defineStore('sudoku-board', () => {
       isFull, 
       possibleValues, 
       percentProgress 
-    } as ISudokuBoard
+    } satisfies ISudokuBoard;
 });
 
   export interface ISudokuBoard {
@@ -134,46 +135,3 @@ export const sudokuBoard = defineStore('sudoku-board', () => {
     viewfinder: ComputedRef<boolean>;
     sameValueSelected: ComputedRef<boolean>;
   }
-
-
-  const boards: ReadableStruct[] = [
-    [
-        [0, 0, 0,   0, 0, 0,    1, 0, 0],
-        [0, 0, 6,   0, 0, 1,    0, 0, 4],
-        [0, 0, 8,   0, 0, 0,    0, 0, 0],
-
-        [0, 0, 0,   0, 3, 4,    0, 0, 0],
-        [0, 0, 0,   0, 8, 0,    0, 5, 0],
-        [0, 2, 9,   0, 0, 0,    6, 0, 3],
-
-        [0, 0, 0,   0, 1, 6,    7, 0, 0],
-        [9, 0, 0,   0, 0, 8,    0, 0, 6],
-        [0, 4, 3,   0, 2, 7,    0, 8, 0]
-    ],
-    [
-        [0, 0, 0,   1, 2, 0,    3, 4, 0],
-        [5, 0, 0,   3, 0, 0,    0, 0, 8],
-        [2, 0, 0,   0, 0, 8,    0, 0, 0],
-
-        [0, 7, 0,   0, 0, 1,    2, 8, 0],
-        [8, 0, 0,   0, 0, 0,    0, 0, 9],
-        [0, 0, 0,   0, 0, 0,    0, 0, 0],
-
-        [0, 0, 0,   0, 6, 4,    0, 0, 0],
-        [3, 1, 0,   0, 0, 0,    8, 0, 0],
-        [0, 4, 0,   0, 0, 0,    0, 0, 6]
-    ],
-    [
-        [0, 0, 0,   9, 0, 0,    0, 0, 0],
-        [0, 5, 1,   0, 0, 0,    0, 0, 0],
-        [0, 7, 0,   4, 0, 0,    5, 9, 8],
-
-        [0, 0, 0,   0, 7, 0,    0, 0, 0],
-        [1, 0, 0,   8, 0, 2,    4, 0, 3],
-        [0, 0, 0,   6, 0, 9,    0, 0, 2],
-
-        [0, 3, 6,   0, 0, 0,    8, 0, 0],
-        [0, 0, 0,   0, 0, 0,    0, 0, 6],
-        [0, 0, 7,   0, 0, 3,    0, 0, 9]
-    ]
-];

@@ -1,57 +1,80 @@
 <script setup lang="ts">
-import type { Cell } from '@/types/sudoku-types';
-import { ref, watch } from 'vue';
+import type { ISudokuCell } from '@/stores/sudoku';
+import type { ValueRange } from '@/types/sudoku-types';
 
+    defineProps<{ 
+        cell: Readonly<ISudokuCell>
+    }>();
 
-const emit = defineEmits(['cell-focusin', 'cell-blur', 'value-change'])
-
-    const props = defineProps<{ cell: Cell }>()
-
-    const selected = ref(false)
-
-    const keyEventHandler = (e: KeyboardEvent) => {
-        const oldValue = props.cell?.value
-        props.cell.setValue(e);
-        if (props.cell?.value !== oldValue) emit('value-change', props.cell)
-    }
+    const emit = defineEmits<{
+        (event: 'cell-focusin', payload: { row: ValueRange, col: ValueRange }): void;
+    }>();
     
 </script>
 
 
 <template>
 
-    <input
-    ref="inputRef"
-    menu-activator
-    v-model="cell.value"
-    :id="`${cell.position.row}${cell.position.col}`"
-    @focus="selected = true; emit('cell-focusin', cell)"
-    @blur="selected = false; emit('cell-blur', null)"
-    @keydown="keyEventHandler($event); emit('cell-focusin', cell)"
-    type="text"
+    <div
     readonly
     class="form-control"
+    @click="emit('cell-focusin', { row: cell.row, col: cell.col })"
     :class="{ 
         'cell-immutable': cell.immutable,
-        'selected': selected
-    }">
+        'selected': cell.selected,
+        'invalid': !cell.valid,
+        'sameValue': cell.sameValueSelected,
+        'viewfinder': cell.viewfinder
+    }"> {{ cell.value || '' }} </div>
+
 
 </template>
 
 
 <style lang="css" scoped>
-    .form-control:hover {
+
+    .viewfinder {
+        background-color: rgb(42, 161, 165) !important;
+    }
+
+    .sameValue {
+        font-weight: bolder !important; 
+        color: yellow !important;
+    }
+
+    .invalid {
+        color: red !important;
+    }
+
+    .selected {
+        background-color: rgba(0, 255, 102, 0.3) !important;
+        border-color: rgba(0, 255, 102, 0.89) !important;
+        box-shadow: 0px 0px 5px rgba(0, 255, 102, 0.89);
+    }
+    /* .form-control:hover {
         background-color: rgba(0, 255, 102, 0.15);
         border-color: rgba(0, 255, 102, 0.3);
         cursor: default;
+    } */
+
+        .form-control:hover {
+            border-color: rgba(0, 255, 102, 0.89) !important;
+        box-shadow: 0px 0px 5px rgba(0, 255, 102, 0.89);
+        cursor: default;
     }
+    
     .form-control {
         user-select: none !important;
-        text-align: center; 
         background-color: transparent;
-        height: 100%;
+        height: 50px;
         font-size: 20px;
         padding: 0;
+        aspect-ratio: 1 / 1;
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
     }
     .form-control:focus {
         background-color: rgba(0, 255, 102, 0.3);

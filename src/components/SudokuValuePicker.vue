@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import { useCounterStore } from "@/stores/counter";
 import { sudokuBoard } from "@/stores/sudoku";
 import _ from "lodash";
 const emit = defineEmits<{
