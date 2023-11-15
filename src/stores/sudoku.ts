@@ -1,7 +1,6 @@
 import type { ArrStruct, IntRange, ReadableStruct, ValueRange } from "@/types/sudoku-types";
 import { SudokuTemplates } from "@/utils/sudoku-templates";
 import { SudokuUtils } from "@/utils/sudoku-utils";
-import _ from "lodash";
 import { defineStore } from "pinia";
 import { computed, ref, type Ref, type ComputedRef } from "vue";
 
@@ -28,7 +27,7 @@ export const sudokuBoard = defineStore('sudoku-board', () => {
         selected: computed(() => _currentSelection.value?.row === row && _currentSelection.value?.col === col),
         valid: computed(() => _validityStruct.value[row-1][col-1]),
         viewfinder: computed(() => _currentSelection.value?.row === row || _currentSelection.value?.col === col ),
-        sameValueSelected: computed(() => _currentSelection.value?.value === val.value)
+        sameValueSelected: computed(() => _currentSelection.value?.value === val.value && val.value !== 0)
       } satisfies ISudokuCell
     });
 

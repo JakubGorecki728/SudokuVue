@@ -1,27 +1,28 @@
 <script setup lang="ts">
 import SudokuValuePicker from './SudokuValuePicker.vue';
 import SudokuBoard from './SudokuBoard.vue';
-import SudokuMenu from './SudokuMenu.vue';
-import { sudokuBoard } from '@/stores/sudoku';
 
-const board = sudokuBoard();
-
-//board.setValue($event.key); board.changeSelection($event.key)
 
 </script>
 
 <template>
 
-    <div id="main-container" @keyup="board.setValue($event.key); board.changeSelection($event.key)" tabindex="1" style="outline: none">
-        <div id="head-container" class="d-flex justify-content-end">
-            <SudokuMenu></SudokuMenu>
-        </div>
+    <!-- <TestComponent/> -->
 
+    <div id="main-container">
+        <div id="head-container">
+            <h1>HEADER CONTENT</h1>
+
+        </div>
         <div id="body-container">
             <div id="board-container">
+
+
                 <div class="board" style="aspect-ratio: 1 / 1 auto;">
+                    <!-- <SudokuView ></SudokuView> -->
                     <SudokuBoard></SudokuBoard>
                 </div>
+
             </div>
             <div id="picker-container">
                 <SudokuValuePicker @value="console.log($event)"/>
@@ -30,10 +31,17 @@ const board = sudokuBoard();
 
     </div>
 
+    <!-- <SudokuView /> -->
 </template>
 
 
 <style lang="css" scoped>
+
+    /* [popover] {
+        inset: unset;
+        top: anchor(top);
+        background-color: red;
+    } */
 
     #modal {
         background-color: rgba(0, 0, 0, 0.185);

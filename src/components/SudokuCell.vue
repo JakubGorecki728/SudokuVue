@@ -7,103 +7,76 @@ import type { ValueRange } from '@/types/sudoku-types';
     }>();
 
     const emit = defineEmits<{
-        (event: 'cell-focusin', payload: { row: ValueRange, col: ValueRange }): void;
+        (event: 'cell-click', payload: { row: ValueRange, col: ValueRange }): void;
     }>();
     
 </script>
 
 
 <template>
-
-    <div
-    readonly
-    class="form-control"
-    @click="emit('cell-focusin', { row: cell.row, col: cell.col })"
-    :class="{ 
-        'cell-immutable': cell.immutable,
-        'selected': cell.selected,
-        'invalid': !cell.valid,
-        'sameValue': cell.sameValueSelected,
-        'viewfinder': cell.viewfinder
-    }"> {{ cell.value || '' }} </div>
-
+    
+    <div 
+    class="cell-container"
+    :class="{ 'viewfinder': cell.viewfinder }"
+    >
+        <div
+        class="cell"
+        @click="emit('cell-click', { row: cell.row, col: cell.col })"
+        :class="{ 
+            'immutable': cell.immutable,
+            'selected': cell.selected,
+            'invalid': !cell.valid,
+            'sameValueSelected': cell.sameValueSelected,
+        }"> {{ cell.value || '' }} </div>
+    </div>
 
 </template>
 
 
 <style lang="css" scoped>
 
-    .viewfinder {
-        background-color: rgb(42, 161, 165) !important;
+    .cell-container {
+        padding: 2px;
+    }
+    .cell{
+        aspect-ratio: 1 / 1;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid rgba(112, 112, 112, 0.3);
+        border-radius: 5px;
     }
 
-    .sameValue {
-        font-weight: bolder !important; 
-        color: yellow !important;
+    .immutable {
+        background-color: rgba(112, 112, 112, 0.3);
+    }
+
+    .viewfinder {
+        background-color: rgba(56, 182, 255, 0.12);
+    }
+
+    .sameValueSelected {
+        /* background-color: rgba(255, 238, 0, 0.15); */
+        box-shadow: 0px 0px 5px rgb(255, 217, 0);
+        border-color: rgb(255, 217, 0);
     }
 
     .invalid {
-        color: red !important;
+        /* background-color: rgba(255, 0, 0, 0.2); */
+        color: red;
     }
 
     .selected {
-        background-color: rgba(0, 255, 102, 0.3) !important;
-        border-color: rgba(0, 255, 102, 0.89) !important;
-        box-shadow: 0px 0px 5px rgba(0, 255, 102, 0.89);
+        /* background-color: rgba(0, 255, 102, 0.01);    */
+        border-color: rgb(0, 162, 255);
+        box-shadow: 0px 0px 10px rgb(30, 176, 255);
     }
-    /* .form-control:hover {
-        background-color: rgba(0, 255, 102, 0.15);
-        border-color: rgba(0, 255, 102, 0.3);
+
+    .cell:hover {
+        box-shadow: 0px 0px 10px rgb(30, 176, 255);
         cursor: default;
-    } */
-
-        .form-control:hover {
-            border-color: rgba(0, 255, 102, 0.89) !important;
-        box-shadow: 0px 0px 5px rgba(0, 255, 102, 0.89);
-        cursor: default;
-    }
-    
-    .form-control {
-        user-select: none !important;
-        background-color: transparent;
-        height: 50px;
-        font-size: 20px;
-        padding: 0;
-        aspect-ratio: 1 / 1;
-        width: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-    }
-    .form-control:focus {
-        background-color: rgba(0, 255, 102, 0.3);
-        border-color: rgba(0, 255, 102, 0.89);
-        box-shadow: 0px 0px 5px rgba(0, 255, 102, 0.89);
-    }
-    .cell-immutable {
-        background-color: rgba(112, 112, 112, 0.2) !important;
-        border-color: rgba(112, 112, 112, 0.3) !important;
-    }
-    .cell-immutable:focus {
-        box-shadow: 0px 0px 5px rgba(112, 112, 112, 0.7) !important;
-        border-color: rgba(112, 112, 112, 0.7) !important;
-        background-color: rgba(112, 112, 112, 0.4) !important;
-    }
-
-    ::selection {
-        color: default;
-        background: transparent;
-    }
-    @media (max-width: 360px) {
-        .form-control {
-        font-size: 12px;
-        }
-    }
-    @media (min-width: 361px) and (max-width: 600px) {
-        .form-control {
-        font-size: 16px;
-        }
     }
 
 </style>
