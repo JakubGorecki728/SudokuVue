@@ -68,8 +68,8 @@ const board = sudokuBoard();
     }
 
     #main-container {
-        width: 100dvw;
-        height: 100dvh;
+        width: 100vw;
+        height: 100svh;
         display: flex;
         flex-direction: column;
     }
