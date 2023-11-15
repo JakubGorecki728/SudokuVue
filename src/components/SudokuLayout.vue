@@ -35,17 +35,6 @@ const board = sudokuBoard();
 
 <style lang="css" scoped>
 
-    #modal {
-        background-color: rgba(0, 0, 0, 0.185);
-        border: none;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
-        width: 50vw;
-        height: 100vh;
-        vertical-align: middle;
-    }
-
     .board {
         display: flex;
         align-items: center;
@@ -79,8 +68,8 @@ const board = sudokuBoard();
     }
 
     #main-container {
-        width: 100vw;
-        height: 100vh;
+        width: 100dvw;
+        height: 100dvh;
         display: flex;
         flex-direction: column;
     }
