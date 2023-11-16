@@ -25,8 +25,8 @@ import type { ValueRange } from '@/types/sudoku-types';
         :class="{ 
             'immutable': cell.immutable,
             'selected': cell.selected,
-            'invalid': !cell.valid,
-            'sameValueSelected': cell.sameValueSelected,
+            'invalid': !cell.valid && cell.sameValueSelected,
+            'sameValueSelected': cell.sameValueSelected && cell.valid,
         }"> {{ cell.value || '' }} </div>
     </div>
 
@@ -36,6 +36,13 @@ import type { ValueRange } from '@/types/sudoku-types';
 <style lang="css" scoped>
 
     .cell-container {
+        --same-value-selected-color: rgb(231, 201, 32);
+        --value-selected-color: rgb(30, 175, 255);
+        --invalid-value-color: rgb(253, 55, 55);
+        --immutable-bg-color: rgba(112, 112, 112, 0.3);
+        --viewfinder-bg-color: rgba(56, 182, 255, 0.1);
+        --box-shadow-size: 0px 0px 8px;
+
         padding: 2px;
     }
     .cell{
@@ -45,37 +52,35 @@ import type { ValueRange } from '@/types/sudoku-types';
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid rgba(112, 112, 112, 0.3);
+        border: 1px solid var(--immutable-bg-color);
         border-radius: 5px;
     }
 
     .immutable {
-        background-color: rgba(112, 112, 112, 0.3);
+        background-color: var(--immutable-bg-color);
     }
 
     .viewfinder {
-        background-color: rgba(56, 182, 255, 0.12);
+        background-color: var(--viewfinder-bg-color);
     }
 
     .sameValueSelected {
-        /* background-color: rgba(255, 238, 0, 0.15); */
-        box-shadow: 0px 0px 5px rgb(255, 217, 0);
-        border-color: rgb(255, 217, 0);
+        box-shadow: var(--box-shadow-size) var(--same-value-selected-color) inset;
+        border-color: var(--same-value-selected-color);
     }
 
     .invalid {
-        /* background-color: rgba(255, 0, 0, 0.2); */
-        color: red;
+        box-shadow: var(--box-shadow-size) var(--invalid-value-color) inset;
+        border-color: var(--invalid-value-color);
     }
 
     .selected {
-        /* background-color: rgba(0, 255, 102, 0.01);    */
-        border-color: rgb(0, 162, 255);
-        box-shadow: 0px 0px 10px rgb(30, 176, 255);
+        border-color: var(--value-selected-color);
+        box-shadow: var(--box-shadow-size) var(--value-selected-color) inset;
     }
 
     .cell:hover {
-        box-shadow: 0px 0px 10px rgb(30, 176, 255);
+        box-shadow: var(--box-shadow-size) var(--value-selected-color) inset;
         cursor: default;
     }
 

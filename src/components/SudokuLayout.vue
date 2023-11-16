@@ -6,25 +6,23 @@ import { sudokuBoard } from '@/stores/sudoku';
 
 const board = sudokuBoard();
 
-//board.setValue($event.key); board.changeSelection($event.key)
-
 </script>
 
 <template>
 
     <div id="main-container" @keyup="board.setValue($event.key); board.changeSelection($event.key)" tabindex="1" style="outline: none">
         <div id="head-container" class="d-flex justify-content-end">
-            <SudokuMenu></SudokuMenu>
+            <SudokuMenu/>
         </div>
 
         <div id="body-container">
             <div id="board-container">
                 <div class="board" style="aspect-ratio: 1 / 1 auto;">
-                    <SudokuBoard></SudokuBoard>
+                    <SudokuBoard/>
                 </div>
             </div>
             <div id="picker-container">
-                <SudokuValuePicker @value="console.log($event)"/>
+                <SudokuValuePicker/>
             </div>
         </div>
 
