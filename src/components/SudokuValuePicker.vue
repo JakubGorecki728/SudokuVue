@@ -2,6 +2,8 @@
 
 import { sudokuBoard } from "@/stores/sudoku";
 import _ from "lodash";
+import SudokuMenu from './SudokuMenu.vue';
+
 const emit = defineEmits<{
     (event: 'value', payload: number | null): void;
 }>();
@@ -31,6 +33,7 @@ const board = sudokuBoard();
                         {{ value ?? 'X' }}
                     </button>
                 </div>
+                <SudokuMenu/>
             </div>
 </template>
 

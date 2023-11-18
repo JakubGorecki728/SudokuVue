@@ -11,9 +11,14 @@ import AppMenu from './AppMenu.vue';
 
     const menuItems: MenuItems = [
         { 
-            title: 'New game',
+            title: 'Next game',
             action: () => { board.newGame(0) },
-            icon: 'plus-box'
+            icon: 'arrow-right-bold'
+        },
+        { 
+            title: 'Previous game',
+            action: () => { board.newGame(0) },
+            icon: 'arrow-left-bold'
         },
         { 
             title: 'Reset game',
@@ -53,7 +58,7 @@ import AppMenu from './AppMenu.vue';
             <label class="label">Possible values: {{ board.possibleValues.length ? board.possibleValues.join(', ') : ' - ' }}</label>
         </div> -->
 
-        <progress class="w-100 mx-4" max="100" :value="board.percentProgress"></progress>
+        <!-- <progress class="w-100 mx-4" max="100" :value="board.percentProgress"></progress> -->
 
 
         <v-btn ref="menuActivator" min-width="40" width="40" class="bg-secondary">

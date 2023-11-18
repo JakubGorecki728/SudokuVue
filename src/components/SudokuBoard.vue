@@ -13,7 +13,7 @@ import { SudokuUtils } from '@/utils/sudoku-utils';
 
 <template>
 
-    <div class="h-100 w-100 p-3">
+    <div class="grid-wrapper">
         <div class="grid-container grid-gap">
             <div class="grid-container" v-for="(row, rowIdx) of transform(board.rows)" :key="rowIdx">
                 <SudokuCell 
@@ -32,9 +32,15 @@ import { SudokuUtils } from '@/utils/sudoku-utils';
 <style scoped>
 
     .grid-gap {
-        grid-gap: 5px;
+        gap: 1%;
     }
 
+    .grid-wrapper {
+        width: clamp(200px, 100%, 600px);
+        height: clamp(200px, 100%, 600px);
+        padding: 1%;
+        aspect-ratio: 1/1;
+    }
     .grid-container {
         aspect-ratio: 1 / 1;
         width: 100%;

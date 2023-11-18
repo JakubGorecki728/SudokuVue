@@ -12,7 +12,7 @@ const board = sudokuBoard();
 
     <div id="main-container" @keyup="board.setValue($event.key); board.changeSelection($event.key)" tabindex="1" style="outline: none">
         <div id="head-container" class="d-flex justify-content-end">
-            <SudokuMenu/>
+            <!-- <SudokuMenu/> -->
         </div>
 
         <div id="body-container">

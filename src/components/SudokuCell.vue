@@ -41,9 +41,11 @@ import type { ValueRange } from '@/types/sudoku-types';
         --invalid-value-color: rgb(253, 55, 55);
         --immutable-bg-color: rgba(112, 112, 112, 0.3);
         --viewfinder-bg-color: rgba(56, 182, 255, 0.1);
-        --box-shadow-size: 0px 0px 8px;
+        --box-shadow-size: 0px 0px 2vh;
 
-        padding: 2px;
+        container: cell-container / size;
+        padding: 1%;
+        aspect-ratio: 1 / 1;
     }
     .cell{
         aspect-ratio: 1 / 1;
@@ -53,7 +55,8 @@ import type { ValueRange } from '@/types/sudoku-types';
         justify-content: center;
         align-items: center;
         border: 1px solid var(--immutable-bg-color);
-        border-radius: 5px;
+        border-radius: 15%;
+        font-size: 50cqh;
     }
 
     .immutable {
