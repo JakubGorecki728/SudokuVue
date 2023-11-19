@@ -36,18 +36,20 @@ import type { ValueRange } from '@/types/sudoku-types';
 <style lang="css" scoped>
 
     .cell-container {
-        --same-value-selected-color: rgb(231, 201, 32);
-        --value-selected-color: rgb(30, 175, 255);
-        --invalid-value-color: rgb(253, 55, 55);
-        --immutable-bg-color: rgba(112, 112, 112, 0.3);
-        --viewfinder-bg-color: rgba(56, 182, 255, 0.1);
-        --box-shadow-size: 0px 0px 2vh;
-
         container: cell-container / size;
         padding: 1%;
         aspect-ratio: 1 / 1;
+
+        --same-value-selected-color: rgb(231, 201, 32);
+        --value-selected-color: rgb(30, 175, 255);
+        --invalid-value-color: rgb(253, 55, 55);
+
+        --viewfinder-bg-color: rgba(56, 182, 255, 0.1);
+        --box-shadow-size: 0px 0px 15cqh;
+        --immutable-bg-color: rgba(112, 112, 112, 0.3);
     }
     .cell{
+
         aspect-ratio: 1 / 1;
         width: 100%;
         height: 100%;
