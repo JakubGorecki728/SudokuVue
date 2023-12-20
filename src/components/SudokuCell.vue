@@ -59,6 +59,7 @@ import type { ValueRange } from '@/types/sudoku-types';
         border: 1px solid var(--immutable-bg-color);
         border-radius: 15%;
         font-size: 50cqh;
+        user-select: none;
     }
 
     .immutable {

@@ -33,7 +33,6 @@ const board = sudokuBoard();
                         {{ value ?? 'X' }}
                     </button>
                 </div>
-                <SudokuMenu/>
             </div>
 </template>
 

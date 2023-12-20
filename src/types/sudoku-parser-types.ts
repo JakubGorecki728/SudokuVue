@@ -70,3 +70,12 @@ type I26<T extends string> = DeleteDuplicates<I25<T>, '\n'>;
 type I27<T extends string> = Split<I26<T>, '\n'>;
 type I28<T extends string> = MapStringsToIntTuples<I27<T>>;
 export type ParsedTemplate<Template extends string> = I28<Template> extends ReadableStruct ? I28<Template> : undefined;
+
+
+type MapToParsedTemplate<Templates extends readonly string[]> = 
+Templates extends readonly [infer First extends string, ...infer Rest extends readonly string[]] ? 
+[ I28<First>, ...MapToParsedTemplate<Rest> ] : Templates;
+
+
+export type ValidTemplates<Templates extends readonly string[]> = 
+MapToParsedTemplate<Templates> extends ReadableStruct[] ? Templates : undefined;

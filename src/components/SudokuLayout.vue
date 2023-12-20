@@ -3,6 +3,7 @@ import SudokuValuePicker from './SudokuValuePicker.vue';
 import SudokuBoard from './SudokuBoard.vue';
 import SudokuMenu from './SudokuMenu.vue';
 import { sudokuBoard } from '@/stores/sudoku';
+import ComputedTest from './ComputedTest.vue';
 
 const board = sudokuBoard();
 
@@ -10,15 +11,26 @@ const board = sudokuBoard();
 
 <template>
 
-    <div id="main-container" @keydown="board.setValue($event.key); board.changeSelection($event.key)" tabindex="1" style="outline: none">
-        <div id="head-container" class="d-flex justify-content-end">
-            <!-- <SudokuMenu/> -->
+    <div 
+    id="main-container" 
+    @keydown="board.setValue($event.key); board.changeSelection($event.key)"
+    @keypress="$event.key === '\u001a' ? board.undo() : ''" 
+    tabindex="1" 
+    style="outline: none"
+    >
+        <div id="head-container" class="d-flex justify-content-between w-100">
+            <div style="font-size: small;">
+            <label class="label h4">Possible values: {{ board.possibleValues.length ? board.possibleValues.join(', ') : ' - ' }}</label>
+            </div>
+            <SudokuMenu/>
+            
         </div>
 
         <div id="body-container">
             <div id="board-container">
                 <div class="board" style="aspect-ratio: 1 / 1 auto;">
                     <SudokuBoard/>
+                    <!-- <ComputedTest/> -->
                 </div>
             </div>
             <div id="picker-container">

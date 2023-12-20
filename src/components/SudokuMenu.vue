@@ -12,12 +12,12 @@ import AppMenu from './AppMenu.vue';
     const menuItems: MenuItems = [
         { 
             title: 'Next game',
-            action: () => { board.newGame(0) },
+            action: () => { board.nextGame() },
             icon: 'arrow-right-bold'
         },
         { 
             title: 'Previous game',
-            action: () => { board.newGame(0) },
+            action: () => { board.previousGame() },
             icon: 'arrow-left-bold'
         },
         { 
@@ -25,11 +25,11 @@ import AppMenu from './AppMenu.vue';
             action: () => { board.resetGame() },
             icon: 'replay'
         },
-        // { 
-        //     title: 'Try Solve',
-        //     action: () => {  },
-        //     icon: 'auto-fix'
-        // },
+        { 
+            title: 'Undo',
+            action: () => { board.undo() },
+            icon: 'undo'
+        },
         { 
             title: () => `Set ${theme.next} theme`,
             action: () => { theme.change() },
@@ -46,7 +46,7 @@ import AppMenu from './AppMenu.vue';
 <template>
 
 
-    <div class="d-flex w-100 justify-content-between p-1" style="gap: 5px">
+    <div class="d-flex" style="gap: 5px">
 
         <!-- <button class="btn btn-primary" @click="board.resetGame()">Reset game</button>
         <button class="btn btn-primary" @click="board.newGame(0)">Board 0</button>

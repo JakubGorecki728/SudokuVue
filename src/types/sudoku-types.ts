@@ -3,7 +3,9 @@ export type CellIdxRange = IntRange<1, 81>
 export type LiteralObject = { [key: string]: any; }
 
 export type SudokuDifficulty = 'easy' | 'medium' | 'hard'
-export type ReadableStruct = ArrStruct<ValueRange | 0>
+export type ReadableStruct = ArrStruct<ValueRange | 0>;
+
+export type ReadonlyReadableStruct = Readonly<Tuple<Readonly<Tuple<Readonly<ValueRange | 0>, 9>>, 9>>;
 export type Templates = Record<SudokuDifficulty, ReadableStruct[]>
 
 

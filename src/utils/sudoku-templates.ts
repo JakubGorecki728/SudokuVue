@@ -1,18 +1,31 @@
-import type { ParsedTemplate } from "@/types/sudoku-parser-types";
+import type { ParsedTemplate, ValidTemplates } from "@/types/sudoku-parser-types";
 import type { ReadableStruct } from "@/types/sudoku-types";
 import _ from "lodash";
 
 export class SudokuTemplates {
 
-    private static parseTemplate<Template extends string>(template: Template): ParsedTemplate<Template> {
+    private static parseTemplate<Template extends string>(template: Template): ReadableStruct {
         const matches = template.match(/(?<=[│║|]) *[0-9 ] *(?=[│║|])/g)?.map(el => parseInt(el) || 0);
         if (matches?.length !== 81) { throw new Error('Sudoku template cannot be parsed because is invalid') }
-        return _.chunk(matches, 9) as ParsedTemplate<Template>;
+        return _.chunk(matches, 9) as ReadableStruct;
     };
 
+    public static getTemplate(index: number) {
+        const templates = SudokuTemplates.templates();
+        const i = index > templates.length-1 ? templates.length-1 : index < 0 ? 0 : index;
+        return {
+            index: index,
+            length: templates.length,
+            template: SudokuTemplates.parseTemplate(templates[i])
+        };
+    }
 
-    public static getTemplate(index: number): ReadableStruct {
-        return SudokuTemplates.parseTemplate(([
+    private static validate<T extends readonly string[]>(templates: T) {
+        return templates as ValidTemplates<T>;
+    }
+
+    private static templates(): readonly string[] {
+        return SudokuTemplates.validate(([
             `
             ╔════╤════╤════╦════╤════╤════╦════╤════╤════╗
             ║    │    │    ║    │    │    ║ 1  │    │    ║
@@ -223,7 +236,7 @@ export class SudokuTemplates {
             ║    │    │    ║    │    │    ║    │ 2  │    ║
             ╚════╧════╧════╩════╧════╧════╩════╧════╧════╝
             `,
-        ] as const)[index]);
+        ] as const));
     }
 }
 

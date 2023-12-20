@@ -2,23 +2,22 @@ import type { ArrStruct, IntRange, ReadableStruct, ValueRange } from "@/types/su
 import { SudokuTemplates } from "@/utils/sudoku-templates";
 import { SudokuUtils } from "@/utils/sudoku-utils";
 import { defineStore } from "pinia";
-import { computed, ref, type Ref, type ComputedRef } from "vue";
+import { computed, ref, type ComputedRef } from "vue";
+import { sudokuState } from "./sudoku-state";
 
 
 
 export const sudokuBoard = defineStore('sudoku-board', () => {
 
-    const _boardNo = ref(0);
-    const _generated = computed(() => SudokuTemplates.getTemplate(_boardNo.value));
-    const _currentStruct = ref<ReadableStruct>(_generated.value);
+    const state = sudokuState();
+    const _generated = computed(() => state.initialRows);
+    const _currentStruct = computed(() => state.currentRows);
     const _validityStruct = computed(() => SudokuUtils.getValidityStruct(_currentStruct.value));
     const _currentSelection = ref<ISudokuCell | null>(null);
-    const _valueChangeHandler = () => {
-      _currentStruct.value = SudokuUtils.mapCell(rows, (cell) => cell.value.value);
-    };
+    const _clearSelection = () => { _currentSelection.value = null };
 
-    const rows = SudokuUtils.mapCell(_generated.value, (value, row, col) => {
-      const val = ref(value);
+    const rows = SudokuUtils.mapCell(_currentStruct.value, (value, row, col) => {
+      const val = computed(() => _currentStruct.value[row-1][col-1]);
       return {
         value: val,
         row: row,
@@ -46,9 +45,8 @@ export const sudokuBoard = defineStore('sudoku-board', () => {
         deletes.some(el => el === value) ? 0 : undefined;
 
       if (_value === undefined) return;
-
-      _currentSelection.value.value = _value as any;
-      _valueChangeHandler();
+      const pos = { row: _currentSelection.value.row, col: _currentSelection.value.col};
+      state.setValue({...pos, value: _value});
     };
 
     const changeSelection = (key: KeyboardEvent['key']) => {
@@ -69,18 +67,24 @@ export const sudokuBoard = defineStore('sudoku-board', () => {
       setSelection(pos);
     };
 
-    const newGame = (boardNumber: number) => {
-      _boardNo.value = boardNumber;
-      SudokuUtils.forEachCell(rows, (cell, row, col) => {
-        cell.value.value = _generated.value[row-1][col-1];
-      });
-      _currentSelection.value = null;
-      _valueChangeHandler();
-    };
+    const nextGame = () => {
+      state.nextBoard();
+      _clearSelection();
+    }
+
+    const previousGame = () => {
+      state.previousBoard();
+      _clearSelection();
+    }
 
     const resetGame = () => {
-      newGame(_boardNo.value);
+      state.resetBoard();
+      _clearSelection();
     };
+
+    const undo = () => {
+      state.undo();
+    }
 
     const isValid = computed(() => SudokuUtils.isValidityStructValid(_validityStruct.value));
 
@@ -101,9 +105,11 @@ export const sudokuBoard = defineStore('sudoku-board', () => {
       rows, 
       setSelection, 
       setValue, 
-      changeSelection, 
-      newGame,
+      changeSelection,
+      nextGame,
+      previousGame,
       resetGame, 
+      undo,
       isValid, 
       isFull, 
       possibleValues, 
@@ -113,8 +119,10 @@ export const sudokuBoard = defineStore('sudoku-board', () => {
 
   export interface ISudokuBoard {
     rows: ArrStruct<Readonly<ISudokuCell>>;
-    newGame: (boardNumber: number) => void;
     resetGame: () => void;
+    nextGame: () => void;
+    previousGame: () => void;
+    undo: () => void;
     setValue: (value: KeyboardEvent['key'] | (ValueRange | 0 | null)) => void;
     changeSelection: (direction: KeyboardEvent['key']) => void;
     setSelection: (e: { row: ValueRange, col: ValueRange } | null) => void;
@@ -125,7 +133,7 @@ export const sudokuBoard = defineStore('sudoku-board', () => {
   }
 
   export interface ISudokuCell {
-    value: Ref<(ValueRange | 0)>;
+    value: ComputedRef<(ValueRange | 0)>;
     selected: ComputedRef<boolean>;
     immutable: ComputedRef<boolean>;
     valid: ComputedRef<boolean>;
